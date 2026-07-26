@@ -81,5 +81,3 @@ Loader toolbox, whose logic is integrated into Step 0, plus orphaned
 sidecars and old manuals; v0.53.2 restores the truncated
 `CCMWaypointTool.execute()` so Step 3 waypoint routing actually runs; v0.53.3
 is a lint-cleanup and copyright-update release).
-
-# <<< END 
