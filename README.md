@@ -10,7 +10,7 @@ vegetation, hydrology and weather into a per-area mobility/speed surface.
 
 SPDX-License-Identifier: GPL-2.0-or-later
 
-Copyright (c) 2026 Eui Soo SON (Beta)
+Copyright (c) 2026 Eui Soo SON
 
 ---
 
