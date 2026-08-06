@@ -67,17 +67,4 @@ and Section 9.1 for the CRS-related warnings/errors each step can show.
 | `Vehicle_Data/Vehicles_Can.csv` | Vehicle definitions — 64 platforms (Canada / US / Russia) with VCI, gradients, width, MMP + nation/source/note columns (v0.53). |
 | `Symbology/` | Mobility layer symbology (.lyrx). |
 
-See `CCM_Tool_v0.54.1_User_Manual.docx` for the full manual —
-including Section 3.4, a beginner-focused explainer of why every
-CCM input must use a Projected CRS (e.g. UTM) — and `CHANGELOG_v0.54.md`
-for release notes (v0.54.1 is a relicense and cleanup release under
-SPDX-License-Identifier: GPL-2.0-or-later; v0.54.0 adds smart CRS/projection 
-warnings to Steps 0, 1, 3 and 4, and expands the manual with per-step 
-data/projection guidance; v0.53.0 expands the vehicle database to 64 Canadian 
-/ US / Russian platforms; v0.53.1 is a repository-cleanup release — removed 
-the superseded standalone MGCP Data Loader toolbox, whose logic is integrated 
-into Step 0, plus orphaned sidecars and old manuals; v0.53.2 restores the 
-truncated `CCMWaypointTool.execute()` so Step 3 waypoint routing actually runs; 
-v0.53.3 is a lint-cleanup and copyright-update release).
 
-# <<< END 
