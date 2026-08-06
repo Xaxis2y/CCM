@@ -73,42 +73,6 @@ New to the tool? See `QUICK_START.md` for a one-page setup + first-run guide.
 See `CCM_Tool_v0.55.0_User_Manual.docx` for the full manual —
 including Section 3.4, a beginner-focused explainer of why every
 CCM input must use a Projected CRS (e.g. UTM) — and `CHANGELOG_v0.55.md`
-for release notes. In short: **v0.55.0 is a consolidation release** — it
-reconciles two copies of this project that had diverged across machines.
-One copy had been debranded and relicensed (module names, "CCM Tool"
-instead of "CCM Tool by Son", no "(Beta)" marker) but was missing every
-fix shipped between v0.54.2 and v0.54.7. The other copy had all of those
-fixes — including the critical Union licence-limit crash fix (v0.54.4) and
-the speed-surface symbology field fix (v0.54.2) — but still carried the
-old branding. v0.55.0 is the fixed code with the clean branding, verified
-file-by-file against both source copies; see CHANGELOG_v0.55.md for the
-full reconciliation notes. Prior release notes: v0.54.7 fixes a
-smoke-test-only bug — `tests/arcpy_smoke_test_step3.py` reported which
-isochrone code path ran by inspecting `msgs.warnings`, but
-`ccm_isochrone.py` logs via the global `arcpy.AddWarning()`, so the check
-always silently reported the wrong path; replaced with a reliable
-`"gridcode"` field check; no production-code behaviour changed; v0.54.6 is
-a follow-up to v0.54.5's ERROR 160333 fix — a real ArcGIS Pro re-run
-showed that mitigation fires but doesn't resolve the error, so Reclassify
-now runs on the in-memory raster first, and the Reachability Map/Isochrone
-tool falls back to its vector method if the raster path fails outright, so
-an isochrone is always produced; v0.54.5 fixes ERROR 160333 — Reclassify
-could fail immediately after DistanceAccumulation in the Reachability
-Map/Isochrone tool — plus a vehicle-name bug in the Step 1 smoke test;
-v0.54.4 fixes ERROR 000384 — Step 2's Union call failed outright below an
-Advanced licence; v0.54.3 verified the v0.54.2 symbology fixes against
-real ArcGIS Pro and fixed a transparency regression; v0.54.1 is a rebrand +
-relicense release — "MCE CCM Tool" was renamed "CCM Tool by Son" throughout
-and the project was relicensed under SPDX-License-Identifier:
-GPL-2.0-or-later (v0.55.0 drops the "by Son" suffix — see above); v0.54.0
-adds smart CRS/projection warnings to Steps 0, 1, 3 and 4, and expands the
-manual with per-step data/projection guidance; v0.53.0 expands the vehicle
-database to 64 Canadian / US / Russian platforms; v0.53.1 is a
-repository-cleanup release — removed the superseded standalone MGCP Data
-Loader toolbox, whose logic is integrated into Step 0, plus orphaned
-sidecars and old manuals; v0.53.2 restores the truncated
-`CCMWaypointTool.execute()` so Step 3 waypoint routing actually runs; v0.53.3
-is a lint-cleanup and copyright-update release. Full historical changelogs
-(v0.45–v0.54) live in `archives/CHANGELOG_HISTORY/`.
+for release notes. 
 
 # <<< END OF FILE >>>
