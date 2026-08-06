@@ -67,7 +67,7 @@ and Section 9.1 for the CRS-related warnings/errors each step can show.
 | `Vehicle_Data/Vehicles_Can.csv` | Vehicle definitions — 64 platforms (Canada / US / Russia) with VCI, gradients, width, MMP + nation/source/note columns (v0.53). |
 | `Symbology/` | Mobility layer symbology (.lyrx). |
 
-See `CCM_Tool_by_Son_v0.54.7_User_Manual.docx` for the full manual —
+See `CCM_Tool_by_Son_v0.54.1_User_Manual.docx` for the full manual —
 including Section 3.4, a beginner-focused explainer of why every
 CCM input must use a Projected CRS (e.g. UTM) — and `CHANGELOG_v0.54.md`
 for release notes (v0.54.7 fixes a smoke-test-only bug — `tests/arcpy_smoke_test_step3.py` reported which isochrone code path ran by inspecting `msgs.warnings`, but `ccm_isochrone.py` logs via the global `arcpy.AddWarning()`, so the check always silently reported the wrong path; replaced with a reliable `"gridcode"` field check; no production-code behaviour changed; v0.54.6 is a follow-up to v0.54.5's ERROR 160333 fix — a real ArcGIS Pro re-run showed that mitigation fires but doesn't resolve the error, so Reclassify now runs on the in-memory raster first, and the Reachability Map/Isochrone tool falls back to its vector method if the raster path fails outright, so an isochrone is always produced; v0.54.5 fixes ERROR 160333 — Reclassify could fail immediately after DistanceAccumulation in the Reachability Map/Isochrone tool — plus a vehicle-name bug in the Step 1 smoke test; v0.54.4 fixes ERROR 000384 — Step 2's Union call failed outright below an Advanced licence; v0.54.3 verified the v0.54.2 symbology fixes against real ArcGIS Pro and fixed a transparency regression; v0.54.1 is a rebrand + relicense release — "MCE CCM
