@@ -1,4 +1,4 @@
-# CCM Tool by Son — v0.54.7
+# CCM Tool — v0.54.7
 
 Cross-Country Mobility (CCM) assessment toolbox for ArcGIS Pro. Estimates where a
 given vehicle can travel across terrain by combining slope, soil strength,
