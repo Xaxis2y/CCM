@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CCM Soil Preprocessor – Concept Overview</title>
+<style>
+  /* ══════════════════════════════════════════════════════════════════════
+     THEME PALETTE  (added v0.56.0)
+     Every colour in this stylesheet is a variable, so the whole document
+     re-themes from the two blocks below.  Dark is the default; light is
+     applied automatically when the OS/browser asks for it, and either can
+     be forced with the toggle in the top-right corner.
+     ══════════════════════════════════════════════════════════════════ */
+  :root {
+    color-scheme: dark;
+    --c-0e1810: #0e1810;
+    --c-0e1a0e: #0e1a0e;
+    --c-0e2a40: #0e2a40;
+    --c-0f1117: #0f1117;
+    --c-0f1e10: #0f1e10;
+    --c-101828: #101828;
+    --c-111a10: #111a10;
+    --c-121e14: #121e14;
+    --c-141820: #141820;
+    --c-141a28: #141a28;
+    --c-141c2a: #141c2a;
+    --c-142010: #142010;
+    --c-1a1f2e: #1a1f2e;
+    --c-1a2030: #1a2030;
+    --c-1a2210: #1a2210;
+    --c-1a2540: #1a2540;
+    --c-1a2810: #1a2810;
+    --c-1a2840: #1a2840;
+    --c-1a3025: #1a3025;
+    --c-1a3050: #1a3050;
+    --c-1a3a20: #1a3a20;
+    --c-1a4070: #1a4070;
+    --c-1a4a70: #1a4a70;
+    --c-1c2230: #1c2230;
+    --c-1e1a30: #1e1a30;
+    --c-1e2438: #1e2438;
+    --c-1e2840: #1e2840;
+    --c-252c3d: #252c3d;
+    --c-2a1515: #2a1515;
+    --c-2a1a10: #2a1a10;
+    --c-2a1a30: #2a1a30;
+    --c-2a1e10: #2a1e10;
+    --c-2a2010: #2a2010;
+    --c-2a3248: #2a3248;
+    --c-2a3a1a: #2a3a1a;
+    --c-2a3a50: #2a3a50;
+    --c-2a3a5a: #2a3a5a;
+    --c-2a3a60: #2a3a60;
+    --c-2a4818: #2a4818;
+    --c-2a4a18: #2a4a18;
+    --c-2a4a1a: #2a4a1a;
+    --c-2a5040: #2a5040;
+    --c-2a8a40: #2a8a40;
+    --c-3a2a10: #3a2a10;
+    --c-3a2a60: #3a2a60;
+    --c-3a4a50: #3a4a50;
+    --c-3a4a60: #3a4a60;
+    --c-3a5060: #3a5060;
+    --c-3a5080: #3a5080;
+    --c-40a8df: #40a8df;
+    --c-4a2a60: #4a2a60;
+    --c-4a3818: #4a3818;
+    --c-4a5a70: #4a5a70;
+    --c-4a6080: #4a6080;
+    --c-4aafef: #4aafef;
+    --c-5a2020: #5a2020;
+    --c-5a3010: #5a3010;
+    --c-5a3a18: #5a3a18;
+    --c-5a4010: #5a4010;
+    --c-5a6a80: #5a6a80;
+    --c-5a7090: #5a7090;
+    --c-5a7a50: #5a7a50;
+    --c-5a7a60: #5a7a60;
+    --c-5a7aaa: #5a7aaa;
+    --c-5a8abf: #5a8abf;
+    --c-5a9a40: #5a9a40;
+    --c-5a9adf: #5a9adf;
+    --c-5ecf80: #5ecf80;
+    --c-60a840: #60a840;
+    --c-6a2a10: #6a2a10;
+    --c-6a7a90: #6a7a90;
+    --c-6a8a60: #6a8a60;
+    --c-6a8aaa: #6a8aaa;
+    --c-6ecf7a: #6ecf7a;
+    --c-70c050: #70c050;
+    --c-70c850: #70c850;
+    --c-7eb8f7: #7eb8f7;
+    --c-808898: #808898;
+    --c-80d060: #80d060;
+    --c-8a6a10: #8a6a10;
+    --c-8a9ab0: #8a9ab0;
+    --c-8aabcc: #8aabcc;
+    --c-908040: #908040;
+    --c-90c870: #90c870;
+    --c-9a60cf: #9a60cf;
+    --c-a0b8c8: #a0b8c8;
+    --c-a0b8d0: #a0b8d0;
+    --c-a0d880: #a0d880;
+    --c-b0d890: #b0d890;
+    --c-bf7a40: #bf7a40;
+    --c-c07adf: #c07adf;
+    --c-c0d0e8: #c0d0e8;
+    --c-df6060: #df6060;
+    --c-df7040: #df7040;
+    --c-df9a30: #df9a30;
+    --c-dfaf40: #dfaf40;
+    --c-e0a040: #e0a040;
+    --c-e0c060: #e0c060;
+    --c-e0e6f0: #e0e6f0;
+    --c-ef8a40: #ef8a40;
+    --c-ef8a60: #ef8a60;
+    --c-1a3a50: #1a3a50;
+    --c-2a3a18: #2a3a18;
+    --c-3a2010: #3a2010;
+    --c-3a2040: #3a2040;
+    --c-3a5a40: #3a5a40;
+    --c-4a1515: #4a1515;
+    --c-4a3010: #4a3010;
+    --c-4a3510: #4a3510;
+    --c-4a7a30: #4a7a30;
+    --c-a0c8a0: #a0c8a0;
+    --c-c09060: #c09060;
+    --c-c0b870: #c0b870;
+    --c-df8a40: #df8a40;
+    --c-e05050: #e05050;
+    --toggle-bg: #1a1f2e; --toggle-fg: #a0b8d0; --toggle-border: #2a3248;
+  }
+
+  /* Forced light, and the OS-preference default. */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --c-0e1810: #f3faf0;
+    --c-0e1a0e: #f6fbf3;
+    --c-0e2a40: #e5ecf2;
+    --c-0f1117: #f4f7fb;
+    --c-0f1e10: #f0f8ec;
+    --c-101828: #edeff3;
+    --c-111a10: #f2f9ef;
+    --c-121e14: #e9f5e4;
+    --c-141820: #ffffff;
+    --c-141a28: #eef3fa;
+    --c-141c2a: #eaf0f8;
+    --c-142010: #f0f4ef;
+    --c-1a1f2e: #ffffff;
+    --c-1a2030: #eaebef;
+    --c-1a2210: #f1f4ef;
+    --c-1a2540: #e5e7ee;
+    --c-1a2810: #eff3ed;
+    --c-1a2840: #e5e8ee;
+    --c-1a3025: #eaefec;
+    --c-1a3050: #cad4e3;
+    --c-1a3a20: #e6eee8;
+    --c-1a4070: #d6dee9;
+    --c-1a4a70: #c1d4e3;
+    --c-1c2230: #e9ebee;
+    --c-1e1a30: #ebeaef;
+    --c-1e2438: #d3d6e0;
+    --c-1e2840: #e4e7ec;
+    --c-252c3d: #d2d5de;
+    --c-2a1515: #f1ecec;
+    --c-2a1a10: #f3efec;
+    --c-2a1a30: #eeeaef;
+    --c-2a1e10: #f3f0ec;
+    --c-2a2010: #f3f0ec;
+    --c-2a3248: #cfd2dc;
+    --c-2a3a1a: #dae2d1;
+    --c-2a3a50: #ccd3dc;
+    --c-2a3a5a: #c9d0dd;
+    --c-2a3a60: #c8cedd;
+    --c-2a4818: #d5e4cc;
+    --c-2a4a18: #d4e4cc;
+    --c-2a4a1a: #d4e3cc;
+    --c-2a5040: #ccdcd6;
+    --c-2a8a40: #cde2d1;
+    --c-3a2a10: #f2eee7;
+    --c-3a2a60: #cec8dd;
+    --c-3a4a50: #405d68;
+    --c-3a4a60: #374e6e;
+    --c-3a5060: #37576e;
+    --c-3a5080: #2a4276;
+    --c-40a8df: #0b5b85;
+    --c-4a2a60: #d4c8dd;
+    --c-4a3818: #e4dbcc;
+    --c-4a5a70: #394c67;
+    --c-4a6080: #334a6b;
+    --c-4aafef: #01558a;
+    --c-5a2020: #e1c8c8;
+    --c-5a3010: #e8d4c6;
+    --c-5a3a18: #e4d6c7;
+    --c-5a4010: #e8dcc6;
+    --c-5a6a80: #3a4a61;
+    --c-5a7090: #344864;
+    --c-5a7a50: #436538;
+    --c-5a7a60: #3c6043;
+    --c-5a7aaa: #2c4469;
+    --c-5a8abf: #214670;
+    --c-5a9a40: #3d7526;
+    --c-5a9adf: #0e447e;
+    --c-5ecf80: #187534;
+    --c-60a840: #3c7722;
+    --c-6a2a10: #edded8;
+    --c-6a7a90: #3a485c;
+    --c-6a8a60: #426039;
+    --c-6a8aaa: #2f4963;
+    --c-6ecf7a: #1f7a34;
+    --c-70c050: #37731f;
+    --c-70c850: #33761b;
+    --c-7eb8f7: #1a5fb4;
+    --c-808898: #3c4455;
+    --c-80d060: #337518;
+    --c-8a6a10: #eae3cf;
+    --c-8a9ab0: #334359;
+    --c-8aabcc: #224365;
+    --c-908040: #746528;
+    --c-90c870: #3b6c20;
+    --c-9a60cf: #491975;
+    --c-a0b8c8: #2b4759;
+    --c-a0b8d0: #25415e;
+    --c-a0d880: #386f18;
+    --c-b0d890: #3e691b;
+    --c-bf7a40: #78471d;
+    --c-c07adf: #561275;
+    --c-c0d0e8: #1a3660;
+    --c-df6060: #7c0e0e;
+    --c-df7040: #85300b;
+    --c-df9a30: #89570a;
+    --c-dfaf40: #85600b;
+    --c-e0a040: #9a5f00;
+    --c-e0c060: #8a6a00;
+    --c-e0e6f0: #1b2430;
+    --c-ef8a40: #8d3c01;
+    --c-ef8a60: #852903;
+    --c-1a3a50: #cad9e3;
+    --c-2a3a18: #dbe3d1;
+    --c-3a2010: #e7d8cf;
+    --c-3a2040: #6e327c;
+    --c-3a5a40: #3a6c44;
+    --c-4a1515: #921c1c;
+    --c-4a3010: #9b5f14;
+    --c-4a3510: #9b6a14;
+    --c-4a7a30: #447d25;
+    --c-a0c8a0: #2b592b;
+    --c-c09060: #6e4821;
+    --c-c0b870: #696224;
+    --c-df8a40: #85440b;
+    --c-e05050: #810c0c;
+    --toggle-bg: #ffffff; --toggle-fg: #33495f; --toggle-border: #d3dce8;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      color-scheme: light;
+    --c-0e1810: #f3faf0;
+    --c-0e1a0e: #f6fbf3;
+    --c-0e2a40: #e5ecf2;
+    --c-0f1117: #f4f7fb;
+    --c-0f1e10: #f0f8ec;
+    --c-101828: #edeff3;
+    --c-111a10: #f2f9ef;
+    --c-121e14: #e9f5e4;
+    --c-141820: #ffffff;
+    --c-141a28: #eef3fa;
+    --c-141c2a: #eaf0f8;
+    --c-142010: #f0f4ef;
+    --c-1a1f2e: #ffffff;
+    --c-1a2030: #eaebef;
+    --c-1a2210: #f1f4ef;
+    --c-1a2540: #e5e7ee;
+    --c-1a2810: #eff3ed;
+    --c-1a2840: #e5e8ee;
+    --c-1a3025: #eaefec;
+    --c-1a3050: #cad4e3;
+    --c-1a3a20: #e6eee8;
+    --c-1a4070: #d6dee9;
+    --c-1a4a70: #c1d4e3;
+    --c-1c2230: #e9ebee;
+    --c-1e1a30: #ebeaef;
+    --c-1e2438: #d3d6e0;
+    --c-1e2840: #e4e7ec;
+    --c-252c3d: #d2d5de;
+    --c-2a1515: #f1ecec;
+    --c-2a1a10: #f3efec;
+    --c-2a1a30: #eeeaef;
+    --c-2a1e10: #f3f0ec;
+    --c-2a2010: #f3f0ec;
+    --c-2a3248: #cfd2dc;
+    --c-2a3a1a: #dae2d1;
+    --c-2a3a50: #ccd3dc;
+    --c-2a3a5a: #c9d0dd;
+    --c-2a3a60: #c8cedd;
+    --c-2a4818: #d5e4cc;
+    --c-2a4a18: #d4e4cc;
+    --c-2a4a1a: #d4e3cc;
+    --c-2a5040: #ccdcd6;
+    --c-2a8a40: #cde2d1;
+    --c-3a2a10: #f2eee7;
+    --c-3a2a60: #cec8dd;
+    --c-3a4a50: #405d68;
+    --c-3a4a60: #374e6e;
+    --c-3a5060: #37576e;
+    --c-3a5080: #2a4276;
+    --c-40a8df: #0b5b85;
+    --c-4a2a60: #d4c8dd;
+    --c-4a3818: #e4dbcc;
+    --c-4a5a70: #394c67;
+    --c-4a6080: #334a6b;
+    --c-4aafef: #01558a;
+    --c-5a2020: #e1c8c8;
+    --c-5a3010: #e8d4c6;
+    --c-5a3a18: #e4d6c7;
+    --c-5a4010: #e8dcc6;
+    --c-5a6a80: #3a4a61;
+    --c-5a7090: #344864;
+    --c-5a7a50: #436538;
+    --c-5a7a60: #3c6043;
+    --c-5a7aaa: #2c4469;
+    --c-5a8abf: #214670;
+    --c-5a9a40: #3d7526;
+    --c-5a9adf: #0e447e;
+    --c-5ecf80: #187534;
+    --c-60a840: #3c7722;
+    --c-6a2a10: #edded8;
+    --c-6a7a90: #3a485c;
+    --c-6a8a60: #426039;
+    --c-6a8aaa: #2f4963;
+    --c-6ecf7a: #1f7a34;
+    --c-70c050: #37731f;
+    --c-70c850: #33761b;
+    --c-7eb8f7: #1a5fb4;
+    --c-808898: #3c4455;
+    --c-80d060: #337518;
+    --c-8a6a10: #eae3cf;
+    --c-8a9ab0: #334359;
+    --c-8aabcc: #224365;
+    --c-908040: #746528;
+    --c-90c870: #3b6c20;
+    --c-9a60cf: #491975;
+    --c-a0b8c8: #2b4759;
+    --c-a0b8d0: #25415e;
+    --c-a0d880: #386f18;
+    --c-b0d890: #3e691b;
+    --c-bf7a40: #78471d;
+    --c-c07adf: #561275;
+    --c-c0d0e8: #1a3660;
+    --c-df6060: #7c0e0e;
+    --c-df7040: #85300b;
+    --c-df9a30: #89570a;
+    --c-dfaf40: #85600b;
+    --c-e0a040: #9a5f00;
+    --c-e0c060: #8a6a00;
+    --c-e0e6f0: #1b2430;
+    --c-ef8a40: #8d3c01;
+    --c-ef8a60: #852903;
+      --c-1a3a50: #cad9e3;
+      --c-2a3a18: #dbe3d1;
+      --c-3a2010: #e7d8cf;
+      --c-3a2040: #6e327c;
+      --c-3a5a40: #3a6c44;
+      --c-4a1515: #921c1c;
+      --c-4a3010: #9b5f14;
+      --c-4a3510: #9b6a14;
+      --c-4a7a30: #447d25;
+      --c-a0c8a0: #2b592b;
+      --c-c09060: #6e4821;
+      --c-c0b870: #696224;
+      --c-df8a40: #85440b;
+      --c-e05050: #810c0c;
+      --toggle-bg: #ffffff; --toggle-fg: #33495f; --toggle-border: #d3dce8;
+    }
+  }
+
+  /* Theme toggle */
+  #theme-toggle {
+    position: fixed; top: 14px; right: 16px; z-index: 99;
+    font: 600 11px 'Segoe UI', sans-serif; letter-spacing: .3px;
+    background: var(--toggle-bg); color: var(--toggle-fg);
+    border: 1px solid var(--toggle-border); border-radius: 6px;
+    padding: 6px 11px; cursor: pointer;
+  }
+  #theme-toggle:hover { filter: brightness(1.12); }
+  @media print { #theme-toggle { display: none; } }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--c-0f1117); color: var(--c-e0e6f0); padding: 28px; font-size: 13px; }
+  h1 { font-size: 18px; color: var(--c-7eb8f7); margin-bottom: 4px; letter-spacing: 0.5px; }
+  .subtitle { color: var(--c-6a7a90); font-size: 12px; margin-bottom: 28px; }
+
+  /* ── PIPELINE ROW ── */
+  .pipeline { display: flex; align-items: stretch; gap: 0; margin-bottom: 32px; }
+  .stage { flex: 1; background: var(--c-1a1f2e); border: 1px solid var(--c-2a3248); border-radius: 8px; padding: 14px 12px; }
+  .arrow-col { display: flex; align-items: center; justify-content: center; width: 32px; flex-shrink: 0; color: var(--c-3a5080); font-size: 18px; }
+  .stage-num { display: inline-block; width: 20px; height: 20px; border-radius: 50%; font-size: 10px; font-weight: 700; text-align: center; line-height: 20px; margin-bottom: 6px; }
+  .n1 { background: var(--c-1a4070); color: var(--c-7eb8f7); }
+  .n2 { background: var(--c-1a3a20); color: var(--c-6ecf7a); }
+  .n3 { background: var(--c-3a2a10); color: var(--c-e0a040); }
+  .stage-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .t1 { color: var(--c-7eb8f7); } .t2 { color: var(--c-6ecf7a); } .t3 { color: var(--c-e0a040); }
+  .stage p { font-size: 11.5px; color: var(--c-8a9ab0); line-height: 1.6; }
+
+  /* ── SECTION TITLES ── */
+  .sec-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--c-4a6080); margin: 0 0 10px 0; }
+
+  /* ── SOURCE CARDS ── */
+  .sources { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .src { flex: 1; min-width: 150px; background: var(--c-141820); border: 1px solid var(--c-252c3d); border-radius: 7px; padding: 12px; }
+  .src.mil { border-color: var(--c-2a3a1a); background: var(--c-111a10); }
+  .src-name { font-size: 12px; font-weight: 700; color: var(--c-c0d0e8); margin-bottom: 6px; }
+  .src.mil .src-name { color: var(--c-b0d890); }
+  .src-tag { display: inline-block; font-size: 10px; background: var(--c-1e2840); color: var(--c-5a7aaa); border: 1px solid var(--c-2a3a5a); border-radius: 3px; padding: 1px 5px; margin-bottom: 6px; }
+  .src-tag.mil-tag { background: var(--c-1a2810); color: var(--c-5a9a40); border-color: var(--c-2a4a18); }
+  .src-fields { font-size: 10.5px; color: var(--c-5a6a80); line-height: 1.6; }
+  .src-fields code { color: var(--c-a0b8d0); background: var(--c-1c2230); padding: 0 3px; border-radius: 2px; font-size: 10px; }
+  .src.mil .src-fields code { background: var(--c-1a2210); color: var(--c-90c870); }
+
+  /* ── NORMALISATION PATHS ── */
+  .norm-grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+  .norm-grid2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
+  .norm-path { background: var(--c-141820); border: 1px solid var(--c-252c3d); border-radius: 7px; padding: 12px; }
+  .path-label { font-size: 11px; font-weight: 700; color: var(--c-a0b8c8); margin-bottom: 4px; }
+  .path-input { font-size: 10.5px; color: var(--c-6a8a60); margin-bottom: 6px; }
+  .path-arrow { text-align: center; color: var(--c-3a5080); font-size: 13px; margin: 4px 0; }
+  .path-step  { font-size: 10.5px; color: var(--c-5a7090); line-height: 1.5; margin-bottom: 3px; }
+  .path-out   { font-size: 11px; font-weight: 700; color: var(--c-e0a040); margin-top: 6px; }
+  .badge { display: inline-block; font-size: 9.5px; border-radius: 3px; padding: 1px 5px; }
+  .b-pct  { background:var(--c-1a3025); color:var(--c-5ecf80); border:1px solid var(--c-2a5040); }
+  .b-txt  { background:var(--c-1a2540); color:var(--c-5a9adf); border:1px solid var(--c-2a3a60); }
+  .b-wrb  { background:var(--c-2a1a30); color:var(--c-c07adf); border:1px solid var(--c-4a2a60); }
+  .b-name { background:var(--c-2a2010); color:var(--c-df9a30); border:1px solid var(--c-5a4010); }
+  .b-ca   { background:var(--c-2a1515); color:var(--c-df6060); border:1px solid var(--c-5a2020); }
+  .b-tax  { background:var(--c-1a2810); color:var(--c-70c050); border:1px solid var(--c-2a4a18); }
+  .b-smc  { background:var(--c-101828); color:var(--c-40a8df); border:1px solid var(--c-1a3050); }
+
+  /* ── GAP FILL ── */
+  .gap-passes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 28px; }
+  .pass { background: var(--c-141820); border-radius: 7px; padding: 14px; }
+  .p-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .p-badge { font-size: 10px; font-weight: 700; border-radius: 4px; padding: 2px 8px; }
+  .pb1 { background:var(--c-0e2a40); color:var(--c-4aafef); border:1px solid var(--c-1a4a70); }
+  .pb2 { background:var(--c-2a1a10); color:var(--c-ef8a40); border:1px solid var(--c-5a3010); }
+  .p-title { font-size: 12px; font-weight: 700; }
+  .pc1 { color: var(--c-4aafef); } .pc2 { color: var(--c-ef8a40); }
+  .pass p { font-size: 11px; color: var(--c-6a7a90); line-height: 1.6; margin-bottom: 5px; }
+  .pass .acc { font-size: 11px; font-weight: 700; color: var(--c-a0b8c8); margin-top: 6px; }
+  .pass .applies-to { font-size: 10px; color: var(--c-3a5060); margin-top: 4px; }
+  .pass ul { padding-left: 14px; }
+  .pass li { font-size: 11px; color: var(--c-6a7a90); line-height: 1.7; }
+
+  /* ── USCS CHIPS ── */
+  .uscs-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+  .uscs-chip { font-size: 11px; background: var(--c-1a2030); border: 1px solid var(--c-2a3248); border-radius: 4px; padding: 3px 9px; color: var(--c-a0b8d0); }
+  .uscs-chip span { color: var(--c-5a7090); font-size: 10px; margin-left: 4px; }
+
+  /* ── DETECT ── */
+  .detect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+  .detect-box { background: var(--c-141820); border: 1px solid var(--c-252c3d); border-radius: 7px; padding: 12px; }
+  .detect-box h4 { font-size: 11.5px; font-weight: 700; color: var(--c-8aabcc); margin-bottom: 8px; }
+  .detect-box p, .detect-box li { font-size: 11px; color: var(--c-5a6a80); line-height: 1.6; }
+  .detect-box ul { padding-left: 14px; }
+  code { font-family: Consolas, monospace; }
+  .divider { border: none; border-top: 1px solid var(--c-1e2438); margin: 20px 0; }
+  .note { font-size: 10.5px; color: var(--c-3a4a60); margin-top: 10px; }
+
+  /* ══════════════════════ BRIEFING SECTION ══════════════════════ */
+  .brief-header { font-size: 15px; font-weight: 700; color: var(--c-e0c060); margin: 32px 0 6px 0; }
+  .brief-sub { font-size: 11.5px; color: var(--c-5a6a80); margin-bottom: 16px; }
+
+  .global-acc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .gacc-card { background: var(--c-141820); border-radius: 7px; padding: 14px; text-align: center; }
+  .gacc-num { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .gacc-label { font-size: 10.5px; color: var(--c-5a6a80); line-height: 1.5; }
+
+  .acc-legend { display: flex; gap: 16px; font-size: 10.5px; color: var(--c-4a5a70); margin-bottom: 14px; }
+  .acc-legend span { display: flex; align-items: center; gap: 5px; }
+  .acc-dot { width: 8px; height: 8px; border-radius: 50%; display:inline-block; }
+
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 24px; }
+  .cmp-table th { background: var(--c-141c2a); color: var(--c-6a8aaa); font-weight: 700; text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--c-2a3a50); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .cmp-table td { padding: 7px 10px; border-bottom: 1px solid var(--c-1a2030); vertical-align: top; line-height: 1.5; color: var(--c-8a9ab0); }
+  .cmp-table tr:hover td { background: var(--c-141a28); }
+  .cmp-table tr.mil td { background: var(--c-0e1810); }
+  .cmp-table tr.mil:hover td { background: var(--c-121e14); }
+
+  .src-cell { font-weight: 700; white-space: nowrap; }
+  .c-us  { color: var(--c-7eb8f7); }
+  .c-ca  { color: var(--c-ef8a60); }
+  .c-gl  { color: var(--c-c07adf); }
+  .c-mil { color: var(--c-70c850); }
+  .c-gen { color: var(--c-808898); }
+
+  .acc-bar { display: flex; align-items: center; gap: 6px; }
+  .acc-fill { height: 6px; border-radius: 3px; }
+  .hi  { background: var(--c-2a8a40); }
+  .med { background: var(--c-8a6a10); }
+  .low { background: var(--c-6a2a10); }
+  .hi-t  { color: var(--c-5ecf80); font-size:10.5px; font-weight:700; white-space:nowrap; }
+  .med-t { color: var(--c-dfaf40); font-size:10.5px; font-weight:700; white-space:nowrap; }
+  .low-t { color: var(--c-df7040); font-size:10.5px; font-weight:700; white-space:nowrap; }
+
+  .pcs { display: flex; flex-wrap: wrap; gap: 3px; }
+  .pc  { font-size: 9.5px; border-radius: 3px; padding: 1px 5px; font-weight: 700; }
+  .pa { background:var(--c-1a3025); color:var(--c-5ecf80); border:1px solid var(--c-2a5040); }
+  .pb { background:var(--c-1a2540); color:var(--c-5a9adf); border:1px solid var(--c-2a3a60); }
+  .pc_ { background:var(--c-2a1a30); color:var(--c-c07adf); border:1px solid var(--c-4a2a60); }
+  .pd { background:var(--c-2a2010); color:var(--c-df9a30); border:1px solid var(--c-5a4010); }
+  .pe { background:var(--c-2a1515); color:var(--c-df6060); border:1px solid var(--c-5a2020); }
+  .pf { background:var(--c-1a2810); color:var(--c-70c050); border:1px solid var(--c-2a4a18); }
+  .pg { background:var(--c-101828); color:var(--c-40a8df); border:1px solid var(--c-1a3050); }
+
+  .cov { display:inline-block; font-size:10px; border-radius:3px; padding:1px 6px; }
+  .cov-us  { background:var(--c-1a2840); color:var(--c-5a8abf); border:1px solid var(--c-2a3a60); }
+  .cov-ca  { background:var(--c-2a1e10); color:var(--c-bf7a40); border:1px solid var(--c-5a3a18); }
+  .cov-gl  { background:var(--c-1e1a30); color:var(--c-9a60cf); border:1px solid var(--c-3a2a60); }
+  .cov-mil { background:var(--c-142010); color:var(--c-60a840); border:1px solid var(--c-2a4818); }
+  .pending { font-size:10px; background:var(--c-2a2010); color:var(--c-908040); border:1px solid var(--c-4a3818); border-radius:3px; padding:1px 6px; }
+
+  .rec-box { background:var(--c-0f1e10); border:1px solid var(--c-2a4a1a); border-radius:8px; padding:16px; margin-bottom:28px; }
+  .rec-box h3 { font-size:13px; font-weight:700; color:var(--c-80d060); margin-bottom:10px; }
+  .rec-row { display:flex; gap:12px; flex-wrap:wrap; }
+  .rec-item { flex:1; min-width:160px; background:var(--c-0e1a0e); border:1px solid var(--c-2a3a1a); border-radius:6px; padding:10px 12px; }
+  .rec-rank { font-size:10px; color:var(--c-5a7a50); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+  .rec-src  { font-size:12px; font-weight:700; color:var(--c-a0d880); margin-bottom:3px; }
+  .rec-why  { font-size:10.5px; color:var(--c-5a7a60); line-height:1.5; }
+
+  .ck { color:var(--c-5ecf80); text-align:center; }
+  .cf { color:var(--c-70c050); text-align:center; }
+  .cm { color:var(--c-c07adf); text-align:center; }
+  .cn { color:var(--c-3a4a50); text-align:center; }
+  .cg { color:var(--c-40a8df); text-align:center; }
+  .cd { color:var(--c-df9a30); text-align:center; }
+  .ce { color:var(--c-df6060); text-align:center; }
+  .cv { color:var(--c-5a9adf); text-align:center; }
+</style>
+</head>
+<body>
+
+<button id="theme-toggle" type="button" aria-label="Switch between light and dark mode">◐ Light / Dark</button>
+
+<h1>CCM Soil Preprocessor — Concept Overview</h1>
+<p class="subtitle">ccm_soil_preprocess.py &nbsp;·&nbsp; How raw soil data from any source becomes standardised USCS codes &nbsp;·&nbsp; ArcGIS Pro 3.5+</p>
+
+<!-- ══════════ PIPELINE ══════════ -->
+<p class="sec-title">The 3-Stage Pipeline</p>
+<div class="pipeline">
+  <div class="stage">
+    <span class="stage-num n1">1</span>
+    <div class="stage-title t1">DETECT &amp; MAP</div>
+    <p>Figure out <em>what kind</em> of soil data this is and <em>where</em> the soil info lives — which fields, tables, or files. Supports 8 named sources plus a generic fallback.</p>
+  </div>
+  <div class="arrow-col">▶</div>
+  <div class="stage">
+    <span class="stage-num n2">2</span>
+    <div class="stage-title t2">NORMALISE</div>
+    <p>Convert whatever format the source uses (%, text class, WRB code, SMC integer, USDA order, plain name…) into a single two-letter <strong>USCS code</strong> via 7 ordered paths.</p>
+  </div>
+  <div class="arrow-col">▶</div>
+  <div class="stage">
+    <span class="stage-num n3">3</span>
+    <div class="stage-title t3">GAP FILL</div>
+    <p>Data-driven only — no inference. Known non-soil polygons → <strong>NE</strong>. All remaining unknowns → <strong>NE</strong>. We never invent data that does not exist in the source.</p>
+  </div>
+</div>
+
+<!-- ══════════ SOURCES ══════════ -->
+<p class="sec-title">Stage 1 — Supported Source Types &amp; Their Fields</p>
+<div class="sources">
+
+  <div class="src">
+    <div class="src-name">DSS Canada v3</div>
+    <span class="src-tag">Shapefile</span>
+    <div class="src-fields">
+      Polygon: <code>POLY_ID</code> only<br>
+      3 companion DBF tables<br>
+      <code>POLY_ID</code> → CMP<br>
+      → <code>SOIL_ID</code> → Layer<br>
+      → <code>TSAND / TSILT / TCLAY</code>
+    </div>
+  </div>
+
+  <div class="src">
+    <div class="src-name">SLC Canada v3.2</div>
+    <span class="src-tag">File GDB</span>
+    <div class="src-fields">
+      Polygon: <code>POLY_ID</code><br>
+      Tables: CMP, SLT, SNT<br>
+      <code>POLY_ID</code> → CMP<br>
+      → <code>COMP_ID</code> → SLT<br>
+      → <code>TSAND / TSILT / TCLAY</code>
+    </div>
+  </div>
+
+  <div class="src">
+    <div class="src-name">SSURGO / STATSGO2</div>
+    <span class="src-tag">File GDB / Folder</span>
+    <div class="src-fields">
+      Polygon: <code>MUKEY</code><br>
+      <code>MUKEY</code> → component<br>
+      → <code>cokey</code> → chorizon<br>
+      → <code>sandtotal_r / silttotal_r</code><br>
+      → <code>claytotal_r</code><br>
+      Fallback: <code>taxorder</code> (Path F)
+    </div>
+  </div>
+
+  <div class="src">
+    <div class="src-name">HWSD v2 (Global)</div>
+    <span class="src-tag">Raster + MDB</span>
+    <div class="src-fields">
+      Raster pixel = <code>MU_GLOBAL</code><br>
+      Raster → polygon → <code>HWSD2.mdb</code><br>
+      → <code>SAND / SILT / CLAY</code><br>
+      or <code>WRB4</code> code
+    </div>
+  </div>
+
+  <div class="src mil">
+    <div class="src-name">MGCP</div>
+    <span class="src-tag mil-tag">File GDB &nbsp;·&nbsp; 1:50K</span>
+    <div class="src-fields">
+      Surface Cover: <code>SU_SFC</code><br>
+      Attribute: <code>SMC</code> (integer)<br>
+      NE pre-pass FCs:<br>
+      <code>WB_WATERBODY, AL_BUILTUPA</code><br>
+      <code>GA_ROCKAREA, GA_ICEFIELD</code>
+    </div>
+  </div>
+
+  <div class="src mil">
+    <div class="src-name">TDS <small style="color:var(--c-5a7a50);font-weight:400">(NGA)</small></div>
+    <span class="src-tag mil-tag">File GDB &nbsp;·&nbsp; 1:50K</span>
+    <div class="src-fields">
+      Surface Cover: <code>SurfaceCoverA</code><br>
+      Attribute: <code>SMC</code> (integer)<br>
+      NE pre-pass FCs:<br>
+      <code>WaterbodyA, BuiltUpAreaA</code><br>
+      <code>RockyGroundA, GlacierA</code>
+    </div>
+  </div>
+
+  <div class="src mil">
+    <div class="src-name">GGDM <small style="color:var(--c-5a7a50);font-weight:400">(NGA)</small></div>
+    <span class="src-tag mil-tag">File GDB &nbsp;·&nbsp; 1:50K</span>
+    <div class="src-fields">
+      Surface Cover: <code>SurfaceMaterialA</code><br>
+      Attribute: <code>SMC</code> (integer)<br>
+      NE pre-pass FCs:<br>
+      <code>WaterBodyA, BuiltUpAreaA</code><br>
+      <code>RockyGroundA, GlacierA</code>
+    </div>
+  </div>
+
+  <div class="src">
+    <div class="src-name">Generic FC</div>
+    <span class="src-tag">Any polygon</span>
+    <div class="src-fields">
+      User picks fields manually:<br>
+      <code>sand_field / silt_field / clay_field</code><br>
+      <code>texcl_field</code> (USDA class)<br>
+      <code>soilname_field</code> (free text)<br>
+      <code>wrb_field</code> (WRB/FAO code)
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ AUTO-DETECT ══════════ -->
+<p class="sec-title">How Auto-Detection Works</p>
+<div class="detect-grid">
+  <div class="detect-box">
+    <h4>Detection priority (first match wins)</h4>
+    <ul>
+      <li>Field <code>MUKEY</code> → SSURGO</li>
+      <li>Field <code>MU_GLOBAL</code> → HWSD</li>
+      <li>Field <code>POLY_ID</code> + <code>HECTARES</code> + CMP file alongside → DSS</li>
+      <li>Field <code>POLY_ID</code> + companion GDB → SLC</li>
+      <li>Field <code>SMC</code> or <code>SMCL</code> → MGCP (default mil-topo)</li>
+      <li>GDB scan: <code>SU_SFC</code> present → MGCP</li>
+      <li>GDB scan: <code>SurfaceCoverA</code> present → TDS</li>
+      <li>GDB scan: <code>SurfaceMaterialA</code> present → GGDM</li>
+      <li>Filename: "ssurgo"/"statsgo" → SSURGO · "hwsd" → HWSD</li>
+      <li>Filename: "mgcp" → MGCP · "tds" → TDS · "ggdm" → GGDM</li>
+      <li>Anything else → Generic</li>
+    </ul>
+  </div>
+  <div class="detect-box">
+    <h4>Why a join chain instead of direct fields?</h4>
+    <p>Most soil databases deliberately separate geometry from attributes to save space and allow many-to-one relationships (one polygon = multiple soil components at different depths). The preprocessor follows the official join paths, selecting the <strong>dominant surface component</strong> (highest PERCENT value in CMP) as the representative soil for CCM.</p>
+    <br>
+    <p>Military topographic sources (MGCP / TDS / GGDM) are simpler — the SMC code is directly on the polygon. The companion GDB is only used for the <strong>NE pre-pass</strong>: water bodies, built-up areas, rocky ground, and glaciers are stamped NE <em>before</em> soil classification runs.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ NORMALISE ══════════ -->
+<p class="sec-title">Stage 2 — Normalisation: 7 Pathways to a USCS Code</p>
+
+<div class="norm-grid">
+  <div class="norm-path">
+    <span class="badge b-pct">PATH A</span>
+    <div class="path-label">Sand / Silt / Clay %</div>
+    <div class="path-input">e.g. sand=55, silt=30, clay=15</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">Normalise to 100 %</div>
+    <div class="path-step">Coarse fraction override (≥30% → GP/GM/GC)</div>
+    <div class="path-step">USDA texture triangle (if/elif on clay/silt/sand %)</div>
+    <div class="path-step">USCS fines override ("loamy sand" + fines ≥20% → SM)</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-3a5a40)">Most accurate. Used by DSS, SLC, SSURGO, HWSD.</div>
+  </div>
+
+  <div class="norm-path">
+    <span class="badge b-txt">PATH B</span>
+    <div class="path-label">USDA Texture Class</div>
+    <div class="path-input">e.g. "Sandy Clay Loam"<br>"silty clay loam"  "Sil"</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">Lowercase + strip</div>
+    <div class="path-step">Expand abbreviations (sil→silt loam, cl→clay loam…)</div>
+    <div class="path-step">Direct lookup (29 USDA classes)</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-2a3a5a)">When %s unavailable. Generic texcl_field.</div>
+  </div>
+
+  <div class="norm-path">
+    <span class="badge b-wrb">PATH C</span>
+    <div class="path-label">WRB / FAO Code</div>
+    <div class="path-input">e.g. "AR" (Arenosol)<br>"VR" (Vertisol)  "HS" (Histosol)</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">Uppercase 2-char</div>
+    <div class="path-step">Lookup table (58 WRB reference groups)</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-3a2040)">HWSD WRB4 field · Generic wrb_field.</div>
+  </div>
+
+  <div class="norm-path">
+    <span class="badge b-name">PATH D</span>
+    <div class="path-label">Soil Name / Description</div>
+    <div class="path-input">e.g. "Fine Sandy Loam"<br>"Gravelly loamy soil"</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">Lowercase</div>
+    <div class="path-step">Scan for text fragments, longest-first ("sandy loam" wins over bare "sand")</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-4a3010)">Fuzzy fallback. Free-text fields, SMC label.</div>
+  </div>
+</div>
+
+<div class="norm-grid2">
+  <div class="norm-path">
+    <span class="badge b-ca">PATH E</span>
+    <div class="path-label">Canadian Codes</div>
+    <div class="path-input">PMTEX: "CF" "MS"<br>ORDER2: "OR" "BL"</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">PMTEX first char (C=coarse→SP, M=medium→ML, F=fine→CL, O→Pt)</div>
+    <div class="path-step">ORDER2 order lookup (OR→Pt, PD→SP, BL/CH/GL→ML…)</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-4a1515)">Last resort for DSS/SLC when no texture data.</div>
+  </div>
+
+  <div class="norm-path">
+    <span class="badge b-tax">PATH F</span>
+    <div class="path-label">USDA Taxonomy Order</div>
+    <div class="path-input">SSURGO <code>taxorder</code> field:<br>"mollisols" "vertisols"<br>"histosols" "aridisols"</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">Lowercase match on 12 USDA orders</div>
+    <div class="path-step">mollisols→ML · vertisols→CH<br>histosols→Pt · aridisols→SP<br>alfisols→CL · entisols→SP…</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-2a4a18)">SSURGO fallback when no % data.<br>~60–70 % accurate.</div>
+  </div>
+
+  <div class="norm-path">
+    <span class="badge b-smc">PATH G</span>
+    <div class="path-label">SMC Integer Code</div>
+    <div class="path-input">MGCP / TDS / GGDM:<br>SMC = 2, 3, 4, 5, 21…<br>(FACC attribute)</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-step">Integer lookup in SMC_TO_USCS (FACC/MGCP v4.5)</div>
+    <div class="path-step">Fallback: label text → SMC_LABEL_TO_USCS → Path D</div>
+    <div class="path-arrow">↓</div>
+    <div class="path-out">→ USCS code</div>
+    <div class="path-step" style="margin-top:4px;color:var(--c-1a3050)">Military topo primary path.<br>Verify SMC codes vs your product spec.</div>
+  </div>
+</div>
+
+<!-- PATH PRIORITY NOTE -->
+<div style="background:var(--c-141820);border:1px solid var(--c-252c3d);border-radius:7px;padding:12px;margin-bottom:28px;font-size:11.5px;color:var(--c-6a7a90);line-height:1.7;">
+  <strong style="color:var(--c-a0b8c8);">Path priority per polygon</strong> — tries in order, first hit wins:<br>
+  <strong style="color:var(--c-5ecf80);">A (%)</strong> ▶
+  <strong style="color:var(--c-5a9adf);">B (USDA class)</strong> ▶
+  <strong style="color:var(--c-c07adf);">C (WRB)</strong> ▶
+  <strong style="color:var(--c-df9a30);">D (name)</strong> ▶
+  <strong style="color:var(--c-df6060);">E (CA codes)</strong> ▶
+  <strong style="color:var(--c-70c050);">F (taxorder)</strong> ▶
+  <strong style="color:var(--c-40a8df);">G (SMC)</strong> ▶
+  <em>gap fill (Stage 3)</em>
+  &nbsp;<span style="color:var(--c-3a4a60);font-size:10.5px;">(each source only exercises the paths its data supports)</span>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ GAP FILL ══════════ -->
+<p class="sec-title">Stage 3 — Data-Only Gap Fill  (2 Passes)</p>
+<p style="font-size:11px;color:var(--c-4a5a70);margin-bottom:12px;">
+  Design principle: <strong style="color:var(--c-e05050);">no inference</strong> — we never create data that does not exist in the source.
+  Unknown = unknown. Both passes assign <code style="color:var(--c-e0a040);">NE</code>.
+</p>
+<div class="gap-passes">
+  <div class="pass" style="border:1px solid var(--c-1a3a50);">
+    <div class="p-head">
+      <span class="p-badge pb1">PASS 1</span>
+      <span class="p-title pc1">Known Non-Soil (Data-Driven)</span>
+    </div>
+    <p><strong>DSS / SLC:</strong> If a polygon's <code>POLY_ID</code> was never found in the CMP table, the database itself tells us this polygon is water, rock, urban, or ice — not a soil unit.</p>
+    <ul>
+      <li>Track which POLY_IDs had a CMP record (the <em>matched set</em>)</li>
+      <li>Any polygon not in matched set → stamp <code>NE</code></li>
+    </ul>
+    <p style="margin-top:8px;"><strong>MGCP / TDS / GGDM:</strong> The <em>NE pre-pass</em> spatially joins confirmed non-soil feature classes (water bodies, built-up areas, rocky ground, glaciers) onto the surface cover polygons.</p>
+    <div class="acc">Accuracy: ~95 %+</div>
+    <div class="applies-to">DSS, SLC (POLY_ID method) · MGCP, TDS, GGDM (spatial join method)</div>
+  </div>
+
+  <div class="pass" style="border:1px solid var(--c-3a2a10);">
+    <div class="p-head">
+      <span class="p-badge pb2">PASS 2</span>
+      <span class="p-title pc2">Unknown = NE</span>
+    </div>
+    <p>Any polygon still NULL after all normalisation paths and Pass 1 gets <code>NE</code>.</p>
+    <ul>
+      <li>No spatial interpolation from neighbours</li>
+      <li>No statistical mode from the dataset</li>
+      <li>No assumption — if we have no data, we say so</li>
+      <li>Guarantees zero NULL polygons in the output FC</li>
+    </ul>
+    <p style="margin-top:8px;font-size:10.5px;color:var(--c-4a3510);">
+      <strong style="color:var(--c-df8a40);">Why?</strong> CCM uses soil type for mobility scoring.
+      Filling gaps with neighbour data or statistics introduces false confidence
+      in areas with no ground-truth data.
+      <code>NE</code> is the operationally honest answer.
+    </p>
+    <div class="acc">Result: honest unknown — no invented data</div>
+    <div class="applies-to">Applies to: all sources</div>
+  </div>
+</div>
+
+<!-- ══════════ USCS CODES ══════════ -->
+<p class="sec-title">Output — USCS Codes Used</p>
+<div class="uscs-row">
+  <div class="uscs-chip">SP <span>Clean Sand</span></div>
+  <div class="uscs-chip">SM <span>Silty Sand</span></div>
+  <div class="uscs-chip">SC <span>Clayey Sand</span></div>
+  <div class="uscs-chip">SW <span>Well-graded Sand</span></div>
+  <div class="uscs-chip">ML <span>Silt / Sandy Silt</span></div>
+  <div class="uscs-chip">CL <span>Lean Clay</span></div>
+  <div class="uscs-chip">CH <span>Fat Clay</span></div>
+  <div class="uscs-chip">MH <span>Elastic Silt</span></div>
+  <div class="uscs-chip">OL <span>Organic Silt/Clay (low plast.)</span></div>
+  <div class="uscs-chip">OH <span>Organic Clay (high plast.)</span></div>
+  <div class="uscs-chip">GP <span>Poorly-graded Gravel</span></div>
+  <div class="uscs-chip">GM <span>Silty Gravel</span></div>
+  <div class="uscs-chip">GC <span>Clayey Gravel</span></div>
+  <div class="uscs-chip">GW <span>Well-graded Gravel</span></div>
+  <div class="uscs-chip">Pt <span>Peat / Organic</span></div>
+  <div class="uscs-chip">NE <span>Non-Engineerable (water, rock, urban, unknown)</span></div>
+</div>
+<p class="note">Output FC field: <code>soilType</code> (TEXT, 2 chars) — feeds directly into the CCM 4-level soil validator.</p>
+
+<hr class="divider" style="margin-top:28px;">
+
+<!-- ══════════════════════ BRIEFING COMPARISON ══════════════════════ -->
+<p class="brief-header">Soil Data Source Comparison — Briefing Reference</p>
+<p class="brief-sub">All sources supported or planned in ccm_soil_preprocess.py &nbsp;·&nbsp; Accuracy = estimated USCS classification agreement vs field ground truth</p>
+
+<div class="global-acc">
+  <div class="gacc-card" style="border:1px solid var(--c-1a3a50);">
+    <div class="gacc-num" style="color:var(--c-5ecf80);">90–95 %</div>
+    <div class="gacc-label">Best achievable accuracy<br><strong style="color:var(--c-a0c8a0);">SSURGO</strong> (continental US)<br>high-resolution lab samples</div>
+  </div>
+  <div class="gacc-card" style="border:1px solid var(--c-2a3a18);">
+    <div class="gacc-num" style="color:var(--c-dfaf40);">75–82 %</div>
+    <div class="gacc-label">Best global accuracy<br><strong style="color:var(--c-c0b870);">SoilGrids 2.0</strong> <span class="pending">planned</span><br>ML-modelled at 250 m</div>
+  </div>
+  <div class="gacc-card" style="border:1px solid var(--c-3a2010);">
+    <div class="gacc-num" style="color:var(--c-ef8a40);">65–75 %</div>
+    <div class="gacc-label">Current global baseline<br><strong style="color:var(--c-c09060);">HWSD v2</strong> (implemented)<br>~1 km resolution legacy data</div>
+  </div>
+</div>
+
+<div class="acc-legend">
+  <span><span class="acc-dot" style="background:var(--c-2a8a40);"></span>&nbsp;≥ 85 % — High confidence</span>
+  <span><span class="acc-dot" style="background:var(--c-8a6a10);"></span>&nbsp;70–84 % — Medium confidence</span>
+  <span><span class="acc-dot" style="background:var(--c-6a2a10);"></span>&nbsp;&lt; 70 % — Low / indicative only</span>
+</div>
+
+<table class="cmp-table">
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Coverage</th>
+  <th>Resolution</th>
+  <th>USCS Accuracy</th>
+  <th>Format</th>
+  <th>Norm. Paths</th>
+  <th>Key Limitation</th>
+  <th>Best CCM Use</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+  <td class="src-cell c-us">SSURGO</td>
+  <td><span class="cov cov-us">USA only</span></td>
+  <td>1:12K–1:24K<br><small style="color:var(--c-3a5a40)">~30 m polygons</small></td>
+  <td><div class="acc-bar"><div class="acc-fill hi" style="width:90px;"></div><span class="hi-t">90–95 %</span></div></td>
+  <td><code>File GDB</code></td>
+  <td><div class="pcs"><span class="pc pa">A</span><span class="pc pb">B</span><span class="pc pf">F</span></div></td>
+  <td>US only. Complex multi-table join required.</td>
+  <td>US ops — highest accuracy available.</td>
+</tr>
+
+<tr>
+  <td class="src-cell c-us">STATSGO2</td>
+  <td><span class="cov cov-us">USA only</span></td>
+  <td>1:250K<br><small style="color:var(--c-3a5a40)">~1–10 km polygons</small></td>
+  <td><div class="acc-bar"><div class="acc-fill hi" style="width:80px;"></div><span class="hi-t">80–85 %</span></div></td>
+  <td><code>File GDB</code></td>
+  <td><div class="pcs"><span class="pc pa">A</span><span class="pc pb">B</span><span class="pc pf">F</span></div></td>
+  <td>Lower res than SSURGO. Fallback only.</td>
+  <td>US regional planning / large AOI.</td>
+</tr>
+
+<tr>
+  <td class="src-cell c-ca">DSS Canada v3</td>
+  <td><span class="cov cov-ca">Canada only</span></td>
+  <td>1:50K – 1:1M<br><small style="color:var(--c-3a5a40)">varies by province</small></td>
+  <td><div class="acc-bar"><div class="acc-fill hi" style="width:85px;"></div><span class="hi-t">85–90 %</span></div></td>
+  <td><code>Shapefile + DBF</code></td>
+  <td><div class="pcs"><span class="pc pa">A</span><span class="pc pe">E</span></div></td>
+  <td>Texture % occasionally missing → Path E (~70 %).</td>
+  <td>Canadian ops — gold standard for Canadian terrain.</td>
+</tr>
+
+<tr>
+  <td class="src-cell c-ca">SLC Canada v3.2</td>
+  <td><span class="cov cov-ca">Canada only</span></td>
+  <td>1:1M</td>
+  <td><div class="acc-bar"><div class="acc-fill hi" style="width:82px;"></div><span class="hi-t">82–88 %</span></div></td>
+  <td><code>File GDB</code></td>
+  <td><div class="pcs"><span class="pc pa">A</span><span class="pc pe">E</span></div></td>
+  <td>Lower res. Fallback where DSS absent.</td>
+  <td>Canada-wide planning / DSS coverage gaps.</td>
+</tr>
+
+<tr>
+  <td class="src-cell c-gl">HWSD v2</td>
+  <td><span class="cov cov-gl">Global</span></td>
+  <td>~1 km (~1:1M)</td>
+  <td><div class="acc-bar"><div class="acc-fill med" style="width:68px;"></div><span class="med-t">65–75 %</span></div></td>
+  <td><code>Raster .bil</code><br><code>+ Access .mdb</code></td>
+  <td><div class="pcs"><span class="pc pa">A</span><span class="pc pc_">C</span></div></td>
+  <td>1 km too coarse for tactical. 1990s legacy data.</td>
+  <td>Global areas with no other source. Strategic only.</td>
+</tr>
+
+<tr>
+  <td class="src-cell c-gl">SoilGrids 2.0 <span class="pending">planned</span></td>
+  <td><span class="cov cov-gl">Global</span></td>
+  <td>250 m</td>
+  <td><div class="acc-bar"><div class="acc-fill med" style="width:78px;"></div><span class="med-t">75–82 %</span></div></td>
+  <td><code>GeoTIFF</code><br>(6 depth layers)</td>
+  <td><div class="pcs"><span class="pc pa">A</span></div></td>
+  <td>ML-modelled, not measured. Accuracy drops in data-sparse regions.</td>
+  <td>Best global fallback once implemented.</td>
+</tr>
+
+<tr class="mil">
+  <td class="src-cell c-mil">MGCP</td>
+  <td><span class="cov cov-mil">~30 % global</span></td>
+  <td>1:50K</td>
+  <td>
+    <div class="acc-bar"><div class="acc-fill med" style="width:70px;"></div><span class="med-t">~72 %</span></div>
+    <div style="font-size:9.5px;color:var(--c-4a7a30);margin-top:2px;">NE pre-pass: ~95 %+</div>
+  </td>
+  <td><code>File GDB</code></td>
+  <td><div class="pcs"><span class="pc pg">G</span><span class="pc pd">D</span></div></td>
+  <td>Topographic DB — soil is secondary attribute. SMC codes vary by version/supplier.</td>
+  <td>Mil AOIs. Strongest value = NE pre-pass for water/rock/urban.</td>
+</tr>
+
+<tr class="mil">
+  <td class="src-cell c-mil">TDS (NGA)</td>
+  <td><span class="cov cov-mil">NGA coverage</span></td>
+  <td>1:50K</td>
+  <td>
+    <div class="acc-bar"><div class="acc-fill med" style="width:70px;"></div><span class="med-t">~72 %</span></div>
+    <div style="font-size:9.5px;color:var(--c-4a7a30);margin-top:2px;">NE pre-pass: ~95 %+</div>
+  </td>
+  <td><code>File GDB</code></td>
+  <td><div class="pcs"><span class="pc pg">G</span><span class="pc pd">D</span></div></td>
+  <td>Same FACC codes as MGCP. TDS 6.0/7.0 FC names differ from MGCP.</td>
+  <td>NGA-produced operational areas. Shares SMC lookup.</td>
+</tr>
+
+<tr class="mil">
+  <td class="src-cell c-mil">GGDM (NGA)</td>
+  <td><span class="cov cov-mil">NGA coverage</span></td>
+  <td>1:50K</td>
+  <td>
+    <div class="acc-bar"><div class="acc-fill med" style="width:70px;"></div><span class="med-t">~72 %</span></div>
+    <div style="font-size:9.5px;color:var(--c-4a7a30);margin-top:2px;">NE pre-pass: ~95 %+</div>
+  </td>
+  <td><code>File GDB</code></td>
+  <td><div class="pcs"><span class="pc pg">G</span><span class="pc pd">D</span></div></td>
+  <td>NGA successor to TDS. Different FC names (SurfaceMaterialA). GGDM 3.0+ required.</td>
+  <td>Most current NGA products. Prefer over TDS if both available.</td>
+</tr>
+
+<tr>
+  <td class="src-cell c-gen">Generic FC</td>
+  <td><span class="cov cov-gl">Any</span></td>
+  <td>Any</td>
+  <td><div class="acc-bar"><div class="acc-fill low" style="width:50px;"></div><span class="low-t">Varies</span></div></td>
+  <td><code>Any polygon FC</code></td>
+  <td><div class="pcs"><span class="pc pa">A</span><span class="pc pb">B</span><span class="pc pc_">C</span><span class="pc pd">D</span></div></td>
+  <td>Accuracy depends entirely on input data quality.</td>
+  <td>Custom or national datasets not fitting other types.</td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- ══════════ PATH × SOURCE MATRIX ══════════ -->
+<p class="sec-title">Normalisation Path Matrix — Which Sources Use Which Paths</p>
+<table class="cmp-table" style="margin-bottom:28px;">
+<thead>
+<tr>
+  <th>Source</th>
+  <th>A &nbsp;<span style="font-weight:400;color:var(--c-3a5a40);">Sand/Silt/Clay %</span></th>
+  <th>B &nbsp;<span style="font-weight:400;color:var(--c-3a5060);">USDA Class</span></th>
+  <th>C &nbsp;<span style="font-weight:400;color:var(--c-4a2a60);">WRB Code</span></th>
+  <th>D &nbsp;<span style="font-weight:400;color:var(--c-4a3010);">Name Text</span></th>
+  <th>E &nbsp;<span style="font-weight:400;color:var(--c-4a1515);">CA Codes</span></th>
+  <th>F &nbsp;<span style="font-weight:400;color:var(--c-2a4a18);">Taxon Order</span></th>
+  <th>G &nbsp;<span style="font-weight:400;color:var(--c-1a3050);">SMC Code</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="src-cell c-us">SSURGO / STATSGO2</td>
+  <td class="ck">✓ Primary</td>
+  <td class="cv">✓ Fallback</td>
+  <td class="cn">—</td><td class="cn">—</td><td class="cn">—</td>
+  <td class="cf">✓ Last resort</td>
+  <td class="cn">—</td>
+</tr>
+<tr>
+  <td class="src-cell c-ca">DSS / SLC Canada</td>
+  <td class="ck">✓ Primary</td>
+  <td class="cn">—</td><td class="cn">—</td><td class="cn">—</td>
+  <td class="ce">✓ Fallback</td>
+  <td class="cn">—</td><td class="cn">—</td>
+</tr>
+<tr>
+  <td class="src-cell c-gl">HWSD v2</td>
+  <td class="ck">✓ Primary</td>
+  <td class="cn">—</td>
+  <td class="cm">✓ Fallback</td>
+  <td class="cn">—</td><td class="cn">—</td><td class="cn">—</td><td class="cn">—</td>
+</tr>
+<tr class="mil">
+  <td class="src-cell c-mil">MGCP / TDS / GGDM</td>
+  <td class="cn">—</td><td class="cn">—</td><td class="cn">—</td>
+  <td class="cd">✓ Fallback</td>
+  <td class="cn">—</td><td class="cn">—</td>
+  <td class="cg">✓ Primary</td>
+</tr>
+<tr>
+  <td class="src-cell c-gen">Generic FC</td>
+  <td class="ck">✓ if avail.</td>
+  <td class="cv">✓ if avail.</td>
+  <td class="cm">✓ if avail.</td>
+  <td class="cd">✓ if avail.</td>
+  <td class="cn">—</td><td class="cn">—</td><td class="cn">—</td>
+</tr>
+</tbody>
+</table>
+
+<!-- ══════════ RECOMMENDATION ══════════ -->
+<div class="rec-box">
+  <h3>Recommended Data Stack — Layered by Geography</h3>
+  <div class="rec-row">
+    <div class="rec-item">
+      <div class="rec-rank">Layer 1 — US</div>
+      <div class="rec-src">SSURGO / STATSGO2</div>
+      <div class="rec-why">Highest accuracy anywhere (~90–95 %). Use for all continental US operations. gNATSGO covers SSURGO tile gaps.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-rank">Layer 2 — Canada</div>
+      <div class="rec-src">DSS → SLC fallback</div>
+      <div class="rec-why">DSS v3 at detailed scale. SLC v3.2 where DSS coverage is absent. Both use direct sand/silt/clay % (Path A).</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-rank">Layer 3 — Global</div>
+      <div class="rec-src">SoilGrids 2.0 <span class="pending">planned</span></div>
+      <div class="rec-why">Best global option once implemented (250 m, ML-modelled). Until then HWSD v2 covers the global gap at 1 km.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-rank">Layer 4 — Military AOI</div>
+      <div class="rec-src">MGCP / TDS / GGDM</div>
+      <div class="rec-why">Use SMC for soil where other sources have gaps. Most valuable role: NE pre-pass stamps water, rock, and urban areas at ~95 %+ accuracy regardless of which soil source is primary.</div>
+    </div>
+  </div>
+</div>
+
+<p class="note" style="margin-bottom:6px;">Tool: <code>CCMSoilPreprocessTool</code> in <code>ccm_soil_preprocess.py</code> &nbsp;·&nbsp; ArcGIS Pro 3.5+ &nbsp;·&nbsp; No extensions required</p>
+<p class="note">Output: <code>soilType</code> field (TEXT 2 chars) → CCM 4-level soil validator</p>
+
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn  = document.getElementById('theme-toggle');
+  function current() {
+    return root.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  }
+  function paint() { btn.textContent = current() === 'light' ? '\u25D0 Dark mode' : '\u25D1 Light mode'; }
+  btn.addEventListener('click', function () {
+    root.setAttribute('data-theme', current() === 'light' ? 'dark' : 'light');
+    paint();
+  });
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', paint);
+  paint();
+})();
+</script>
+</body>
+</html>

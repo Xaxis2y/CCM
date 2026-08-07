@@ -1,0 +1,131 @@
+# CCM Tool — v0.56.0
+
+Cross-Country Mobility (CCM) assessment toolbox for ArcGIS Pro. Estimates where a
+given vehicle can travel across terrain by combining slope, soil strength,
+vegetation, hydrology and weather into a per-area mobility/speed surface.
+
+---
+
+## Copyright
+
+SPDX-License-Identifier: GPL-2.0-or-later
+
+Copyright (c) 2026 Eui Soo SON
+
+---
+
+## Workflow (run in order in ArcGIS Pro)
+
+0. **Step 0 — Load MGCP Data** (`ccm_step0_mgcp.py`) *(optional)*  
+   Batch-imports MGCP data (GeoPackage / File GDB / Shapefile cells) into one
+   geodatabase, merging matching feature classes across cells, and writes
+   `mgcp_manifest.json` so Step 1 can auto-fill its Soil / Hydrology / Contours inputs.
+1. **Step 1 — Project Setup & Pre-process** (`ccm_step1_setup.py`)  
+   Enter all raw inputs once. Pre-processes soil and vegetation into CCM-ready
+   polygon layers and writes `ccm_project.json` so later steps auto-populate.
+2. **Step 2 — Generate Mobility Map** (`ccm_step2_mobility.py`)  
+   Runs the multi-criteria mobility model for a chosen vehicle and produces the
+   speed-surface feature class (`SpeedKMH`, `Mobility`, and the `F1..F5`/`F_hydro`
+   factor fields). This output is the input for every Step 3 analysis.
+3. **Step 3 — Advanced Analysis** (`ccm_step3_advanced.py`)  
+   Reason map, reachability (isochrone), vehicle comparison, obstacle detection,
+   and fastest-route (waypoint) tools, all driven by the Step 2 speed surface.
+4. **Step 4 — Compare Two Vehicles** (`ccm_vehicle_compare.py`) *(optional)*  
+   Standalone A/B comparison of any two Speed Surface feature classes — the
+   same engine as Step 3's Vehicle Comparison, without needing a project
+   folder. Both inputs must share the same Projected CRS.
+
+All spatial inputs across every step must use one consistent Projected CRS
+(e.g. UTM) — see `CCM_Tool_v0.56.0_User_Manual.docx` Section 3.4 for why,
+and Section 9.1 for the CRS-related warnings/errors each step can show.
+
+New to the tool? See `QUICK_START.md` (or `QUICK_START.html` for a styled,
+easier-to-read version of the same page) for a one-page setup + first-run guide.
+
+---
+
+## Main Components
+
+| File | Role |
+|---|---|
+| `CCM_Tool_v0.56.0.pyt` | ArcGIS Python Toolbox entry point — registers Steps 0-4 (Step 4 = the standalone Vehicle Compare tool); shows a stub error tool if a module fails to import. |
+| `ccm_step0_mgcp.py` | Step 0 — MGCP batch loader + `mgcp_manifest.json` writer; Point/Line/Polygon map grouping, readable FC aliases, `.lyrx` group templates (v0.56). |
+| `ccm_mgcp_catalog.py` | FACC/DIGEST feature-code catalog (names, themes, CCM roles) + FACC-category / name-keyword fallback classification and `mgcp_catalog_user.csv` overrides (v0.56). |
+| `ccm_step1_setup.py` | Step 1 — project setup, soil/veg pre-processing, DEM→slope regions, `ccm_project.json`. |
+| `ccm_step2_mobility.py` | Core mobility (speed-surface) engine. |
+| `ccm_soil_preprocess.py` / `ccm_soil_validator.py` | Soil source ingestion (DSS, SLC, SSURGO, HWSD, SoilGrids, MGCP, TDS, GGDM, generic) into USCS codes. |
+| `ccm_veg_preprocess.py` | Vegetation rasters into VTI / tree spacing / stem diameter. |
+| `ccm_reason_map.py` | Step 3 — factor breakdown reason map. |
+| `ccm_isochrone.py` | Step 3 — travel-time reachability rings. |
+| `ccm_vehicle_compare.py` | Step 3 — two-vehicle A/B speed-surface comparison. |
+| `ccm_obstacle_detect.py` | Step 3 — slope-break / water / gap micro-obstacle scan. |
+| `ccm_waypoints.py` | Step 3 — time-optimal route between two points. |
+| `ccm_data_discovery.py` | One-folder Data Root scanner — keyword + content detection, accuracy-ranked auto-fill (v0.52). |
+| `ccm_map_display.py` | Shared map display module — one visual language for all CCM outputs (v0.51). |
+| `ccm_weather.py` | METAR / Open-Meteo rainfall → RCI adjustment. |
+| `ccm_coords.py` | MGRS / DD / DMS / DDM / UTM coordinate conversion + shared CRS/projection smart-warning helpers (v0.54). |
+| `ccm_project_config.py` | `ccm_project.json` read/write + `run_tool` named-parameter invocation. |
+| `build.py` | Integrity check (syntax, EOF marker, undefined names) + release zip packager. |
+| `tests/` | Arcpy-free pytest suite (192 tests) + licensed-install smoke tests (Steps 0/1/2/3). |
+| `Vehicle_Data/Vehicles_Can.csv` | Vehicle definitions — 64 platforms (Canada / US / Russia) with VCI, gradients, width, MMP + nation/source/note columns (v0.53). |
+| `Symbology/` | Mobility layer symbology (.lyrx). |
+| `archives/` | Historical changelogs (v0.45–v0.54) and superseded code reviews, kept for reference. |
+| `soil_preprocess_concept.html` | Illustrated concept overview of the soil pre-processing pipeline; light + dark theme with a toggle (v0.56). |
+| `QUICK_START.html` | Styled HTML rendering of `QUICK_START.md`, for easier on-screen reading (v0.55.1). |
+| `CCM_anaconda_environment.bat` | Local-only: creates/verifies the dedicated Anaconda environment used by `RUN_LOCAL_VERIFICATION.bat` (v0.55.1). Not packaged in the release zip. |
+
+See `CCM_Tool_v0.56.0_User_Manual.docx` for the full manual —
+including Section 3.4, a beginner-focused explainer of why every
+CCM input must use a Projected CRS (e.g. UTM) — and `CHANGELOG_v0.56.md`
+for release notes. In short: **v0.56.0 is a Step 0 (Load MGCP Data)
+usability release.** Imported layers now group into three map groups —
+**Point / Line / Polygon** — instead of one group per MGCP theme, so a
+full MGCP delivery no longer buries the Contents pane. The
+**"Unknown feature (XXnnn)"** labels are gone: an uncatalogued FACC code
+now falls back to its 2-letter FACC category (correct theme, generic
+name), feature-class names with no FACC code at all (MGCP TRD 4.x
+thematic names such as `HydrographySrf`) are classified by name keyword,
+and Step 0 writes an editable `mgcp_catalog_user.csv` beside the output
+GDB so you can supply exact names from your own TRD catalogue. Imported
+feature classes keep their MGCP code name but gain a readable alias
+(`Building (AL015)`), the group structure can be saved as reusable
+`.lyrx` templates, dense line/polygon layers can be given a scale
+threshold, and the Unknown-CRS repair now runs *before* reprojection
+instead of after it. Prior release notes: v0.55.1 added a styled HTML
+Quick Start and a standalone Anaconda-environment setup script;
+v0.55.0 reconciled two copies of this project that had diverged across
+machines. One copy had a naming/licensing cleanup applied but was missing
+every fix shipped between v0.54.2 and v0.54.7. The other copy had all of
+those fixes — including the critical Union licence-limit crash fix
+(v0.54.4) and the speed-surface symbology field fix (v0.54.2) — but the
+cleanup had not yet reached it. v0.55.0 was the fixed code with the clean
+naming and licensing, verified file-by-file against both source copies;
+see CHANGELOG_v0.55.md for the full reconciliation notes. Prior release notes:
+v0.54.7 fixes a smoke-test-only bug — `tests/arcpy_smoke_test_step3.py`
+reported which isochrone code path ran by inspecting `msgs.warnings`, but
+`ccm_isochrone.py` logs via the global `arcpy.AddWarning()`, so the check
+always silently reported the wrong path; replaced with a reliable
+`"gridcode"` field check; no production-code behaviour changed; v0.54.6 is
+a follow-up to v0.54.5's ERROR 160333 fix — a real ArcGIS Pro re-run
+showed that mitigation fires but doesn't resolve the error, so Reclassify
+now runs on the in-memory raster first, and the Reachability Map/Isochrone
+tool falls back to its vector method if the raster path fails outright, so
+an isochrone is always produced; v0.54.5 fixes ERROR 160333 — Reclassify
+could fail immediately after DistanceAccumulation in the Reachability
+Map/Isochrone tool — plus a vehicle-name bug in the Step 1 smoke test;
+v0.54.4 fixes ERROR 000384 — Step 2's Union call failed outright below an
+Advanced licence; v0.54.3 verified the v0.54.2 symbology fixes against
+real ArcGIS Pro and fixed a transparency regression; v0.54.1 is a rename +
+relicense release — the toolbox was renamed and standardized throughout,
+and the project was relicensed under SPDX-License-Identifier:
+GPL-2.0-or-later; v0.54.0 adds smart CRS/projection warnings to Steps 0,
+1, 3 and 4, and expands the manual with per-step data/projection guidance;
+v0.53.0 expands the vehicle database to 64 Canadian / US / Russian
+platforms; v0.53.1 is a repository-cleanup release — removed the
+superseded standalone MGCP Data Loader toolbox, whose logic is integrated
+into Step 0, plus orphaned sidecars and old manuals; v0.53.2 restores the
+truncated `CCMWaypointTool.execute()` so Step 3 waypoint routing actually
+runs; v0.53.3 is a lint-cleanup and copyright-update release. Full
+historical changelogs (v0.45–v0.54) live in `archives/CHANGELOG_HISTORY/`.
+
+# <<< END OF FILE >>>
