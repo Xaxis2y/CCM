@@ -1,0 +1,18 @@
+uscs_code,rci_dry,rci_moist,rci_wet,description
+GW,380,300,240,Well-graded gravel - maintains strength even when wet
+GP,340,260,200,Poorly graded gravel
+GM,280,200,120,Silty gravel - strength drops with saturation
+GC,240,160,90,Clayey gravel - gravel skeleton sustains load when wet
+SW,260,200,130,Well-graded sand
+SP,230,170,100,Poorly graded sand
+SM,200,140,65,Silty sand - marginal GO for heaviest vehicles when wet
+SC,175,110,48,Clayey sand - RESTRICTED for heavy vehicles when wet
+ML,150,80,32,Silt - RESTRICTED all vehicles when wet
+CL,150,75,28,Lean clay - RESTRICTED all vehicles when wet
+OL,110,55,14,Organic silt - NOGO all vehicles when wet
+MH,120,60,16,Elastic silt (high plasticity) - NOGO all vehicles when wet
+CH,130,65,15,Fat clay - NOGO all vehicles when wet
+OH,90,42,12,Organic clay - NOGO all vehicles when wet
+PT,50,28,8,Peat - NOGO all vehicles when wet; RESTRICTED when dry/moist
+RK,500,500,500,Rock - unlimited bearing capacity
+NE,,,,Not evaluated - unknown soil type
