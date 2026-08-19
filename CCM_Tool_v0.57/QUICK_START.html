@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCM Tool v0.57 - Quick Start</title>
+<style>
+:root{--navy:#102a43;--blue:#1769aa;--teal:#0f766e;--ink:#243b53;--muted:#627d98;--paper:#f7fafc;--line:#d9e2ec;--gold:#f0b429;--red:#c05621}
+*{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "Segoe UI",Arial,sans-serif}
+.hero{background:linear-gradient(135deg,var(--navy),#1f6f8b);color:white;padding:42px calc((100% - 1080px)/2) 36px}
+.hero h1{margin:0 0 6px;font-size:34px;letter-spacing:.2px}.hero p{margin:0;color:#d9f0f5;font-size:17px}.tag{display:inline-block;margin-top:20px;padding:5px 12px;border:1px solid #8ed1d8;border-radius:999px;font-size:12px;letter-spacing:.7px;text-transform:uppercase}
+main{max-width:1080px;margin:0 auto;padding:28px 24px 54px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(16,42,67,.06)}.card h2{margin:0 0 7px;color:var(--navy);font-size:18px}.card p{margin:0;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0 28px}.step{background:white;border-left:5px solid var(--blue);border-radius:8px;padding:15px 17px;box-shadow:0 2px 9px rgba(16,42,67,.05)}.step strong{display:block;color:var(--navy);font-size:16px}.step span{color:var(--muted)}
+h2.section{margin:30px 0 12px;color:var(--navy);font-size:22px;border-bottom:2px solid var(--line);padding-bottom:7px}.callout{padding:15px 18px;border-radius:9px;background:#e6fffa;border:1px solid #81e6d9;margin:16px 0}.callout strong{color:var(--teal)}.warning{background:#fffaf0;border-color:#f6d365}.warning strong{color:#975a16}
+pre{background:#102a43;color:#e6fffa;border-radius:8px;padding:14px 16px;overflow:auto;font:13px/1.55 Consolas,"Courier New",monospace;margin:10px 0 16px}code{background:#edf2f7;padding:2px 5px;border-radius:4px;color:#1f4e79}pre code{background:none;color:inherit;padding:0}ol,ul{padding-left:24px}li{margin:5px 0}.small{color:var(--muted);font-size:13px}.footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+@media(max-width:760px){.hero{padding:30px 22px}.hero h1{font-size:28px}.grid,.steps{grid-template-columns:1fr}main{padding:22px 16px 42px}}
+</style>
+</head>
+<body>
+<header class="hero"><h1>CCM Tool v0.57</h1><p>Integrated ArcGIS Pro toolbox + factual Data Intelligence scan</p><span class="tag">Operator quick start</span></header>
+<main>
+<div class="grid">
+<section class="card"><h2>New in v0.57</h2><p>Step 0b inventories the complete data root, measures available metadata, and produces a reviewable catalog before Step 1.</p></section>
+<section class="card"><h2>What stays stable</h2><p>The proven Steps 0-4 mobility workflow remains available. Step 0b is additive and does not silently change existing inputs.</p></section>
+<section class="card"><h2>Scope boundary</h2><p>The scan reports facts. Quality, Fitness, Confidence, Readiness, and automatic source selection are not calculated in this release.</p></section>
+</div>
+
+<h2 class="section">1. Prepare and verify</h2>
+<p>Open <strong>Anaconda Prompt</strong>, change to the <code>CCM_Tool_v0.57</code> folder, then run:</p>
+<pre><code>CCM_anaconda.bat
+RUN_V057_TESTS.bat</code></pre>
+<p class="small">The default environment is <code>ccm_tool</code> (Python 3.11, pytest, pyflakes, PyInstaller).</p>
+<p>For GeoPackage/file-geodatabase layer enumeration, install optional GDAL/OGR:</p>
+<pre><code>CCM_anaconda.bat ccm_tool_gdal --with-gdal
+set CCM_ENV_NAME=ccm_tool_gdal
+RUN_V057_TESTS.bat</code></pre>
+
+<h2 class="section">2. Add the toolbox</h2>
+<ol><li>Open ArcGIS Pro and a project.</li><li>Catalog pane → right-click <strong>Toolboxes</strong> → <strong>Add Toolbox</strong>.</li><li>Select <code>CCM_Tool_v0.57.pyt</code>.</li><li>Confirm six entries: Step 0, Step 0b, Step 1, Step 2, Step 3, and Step 4.</li></ol>
+
+<h2 class="section">3. Recommended first run</h2>
+<div class="steps">
+<div class="step"><strong>Step 0</strong><span>Optional MGCP consolidation into a project geodatabase.</span></div>
+<div class="step"><strong>Step 0b</strong><span>Scan the full data-root folder and review the factual report.</span></div>
+<div class="step"><strong>Step 1</strong><span>Confirm the catalog paths manually, then preprocess the project inputs.</span></div>
+<div class="step"><strong>Steps 2-4</strong><span>Generate mobility maps and run the analyses required for the mission.</span></div>
+</div>
+<div class="callout"><strong>Step 0b outputs:</strong> <code>ccm_data_catalog.json</code>, <code>CCM_Data_Intelligence_Report.html</code>, <code>CCM_Data_Intelligence_Report.txt</code>, and additive <code>data_root</code>/<code>data_catalog_json</code> keys in <code>ccm_project.json</code>.</div>
+
+<h2 class="section">4. Standalone scan options</h2>
+<p>Use the logged command-line launcher for a real data root:</p>
+<pre><code>RUN_DATA_SCAN.bat "D:\GIS\Source_Data" "D:\GIS\Project" "D:\GIS\Source_Data\Extent\AOI.shp"</code></pre>
+<p>Or launch the safe standalone GUI:</p>
+<pre><code>CCM_Data_Scanner.bat</code></pre>
+
+<h2 class="section">5. ArcPy smoke test</h2>
+<div class="callout warning"><strong>ArcPy requirement:</strong> ArcPy comes from a licensed ArcGIS Pro installation. Open and sign in to ArcGIS Pro before running the test.</div>
+<pre><code>RUN_ARCGIS_SMOKE_TEST.bat</code></pre>
+<p>The script writes test data only below <code>verification_artifacts</code> and checks ArcPy metadata, container enumeration, report outputs, and source-data safety. The log is saved under <code>verification_logs</code>.</p>
+
+<h2 class="section">6. Help</h2>
+<ul><li>Full English operator manual: <code>CCM_Tool_v0.57_User_Manual.docx</code></li><li>Integration details: <code>TOOLBOX_INTEGRATION.md</code></li><li>Release history: <code>CHANGELOG_v0.57.md</code></li><li>If <code>conda</code> is not found, start from Anaconda Prompt.</li><li>If ArcPy initialization fails, open/sign in to ArcGIS Pro and rerun the smoke test.</li></ul>
+<div class="footer">CCM Tool v0.57 · GPL-2.0-or-later · Copyright (c) 2026 Eui Soo SON</div>
+</main>
+</body>
+</html>
