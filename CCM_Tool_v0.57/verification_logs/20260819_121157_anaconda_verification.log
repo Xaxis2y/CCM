@@ -1,0 +1,230 @@
+[verify] CCM Tool v0.57 integrated verification
+[verify] Python: C:\ProgramData\anaconda3\envs\ccm_tool\python.exe
+[verify] Artifacts: C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda
+[verify] Static structure, syntax, scope, and version checks passed
+[verify] Data calibration audit (soil_rci.csv, Vehicles_Can.csv, USCS cross-reference) passed
+[verify] Running pyflakes
+[verify] pyflakes passed
+[verify] Running pytest
+...............................sss...................................... [ 29%]
+........................................................................ [ 58%]
+.................................................s...................... [ 88%]
+.............................                                            [100%]
+============================== warnings summary ===============================
+tests/test_ccm.py: 12 warnings
+  C:\ProgramData\anaconda3\envs\ccm_tool\Lib\site-packages\_pytest\fixtures.py:1313: PytestRemovedIn10Warning: Class-scoped fixture defined as instance method is deprecated.
+  Instance attributes set in this fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use @classmethod decorator and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+241 passed, 4 skipped, 12 warnings in 1.69s
+[verify] pytest passed
+[verify] Running fixture_generation
+Synthetic CCM data root created:
+  C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data
+
+Scan it with:
+  python ccm_step0b_intelligence.py --data-root "C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data" \
+         --aoi "C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data\Extent\AOI_Lebanon.shp"
+[verify] fixture_generation passed
+[verify] Running end_to_end_scan
+==============================================================================
+  CCM Step 0b -- Data Intelligence Scan   v0.57
+==============================================================================
+
+========================================================================================
+CCM DATA INTELLIGENCE - FACTUAL INVENTORY
+Version: 0.57
+Created: 2026-08-19T12:12:01
+Data root: C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data
+Metadata backend: header
+========================================================================================
+
+1. SCAN SUMMARY
+----------------------------------------------------------------------------------------
+Files inspected: 15
+Datasets catalogued: 11
+Unclassified files: 3
+Duplicate groups: 1
+
+2. DETECTED DATA
+----------------------------------------------------------------------------------------
+DEM / Elevation (3)
+  - DEM_10m.tif
+      Role basis: file name
+      Dataset type: raster
+      Source type: DEM
+      Resolution/detail: 10 m
+      CRS: EPSG:32636
+      AOI coverage: 100.0% (bounding-box overlap (upper bound))
+      Schema: not evaluated
+      Compatibility: native
+      Locations: 2 identical copies
+      Limitation: 2 identical copies found in the data root
+  - ASTER_30m.tif
+      Role basis: folder name 'DEM'
+      Dataset type: raster
+      Source type: ASTER
+      Resolution/detail: 30 m
+      CRS: EPSG:32636
+      AOI coverage: 75.0% (bounding-box overlap (upper bound))
+      Schema: not evaluated
+      Compatibility: native
+      Limitation: Covers ~75% of the analysis extent (bounding-box overlap (upper
+                  bound))
+  - SRTM_30m.tif
+      Role basis: file name
+      Dataset type: raster
+      Source type: SRTM
+      Resolution/detail: 30.92 m
+      CRS: EPSG:4326
+      AOI coverage: not measured
+      Schema: not evaluated
+      Compatibility: convertible
+      Limitation: Geographic CRS (EPSG:4326) -- CCM requires a Projected CRS
+      Limitation: CRS differs from the analysis extent (EPSG:4326 vs EPSG:32636) --
+                  coverage not computed
+
+Soil (3)
+  - clay_0-5cm.tif
+      Role basis: folder name 'SoilGrids'
+      Dataset type: raster
+      Source type: SoilGrids
+      Resolution/detail: 250 m
+      CRS: EPSG:32636
+      AOI coverage: 100.0% (bounding-box overlap (upper bound))
+      Schema: not evaluated
+      Compatibility: native
+  - sand_0-5cm.tif
+      Role basis: folder name 'SoilGrids'
+      Dataset type: raster
+      Source type: SoilGrids
+      Resolution/detail: 250 m
+      CRS: EPSG:32636
+      AOI coverage: 100.0% (bounding-box overlap (upper bound))
+      Schema: not evaluated
+      Compatibility: native
+  - silt_0-5cm.tif
+      Role basis: folder name 'SoilGrids'
+      Dataset type: raster
+      Source type: SoilGrids
+      Resolution/detail: 250 m
+      CRS: EPSG:32636
+      AOI coverage: 100.0% (bounding-box overlap (upper bound))
+      Schema: not evaluated
+      Compatibility: native
+
+Vegetation (1)
+  - worldcover_2024.tif
+      Role basis: file name
+      Dataset type: raster
+      Source type: WorldCover
+      Resolution/detail: 10 m
+      CRS: EPSG:32636
+      AOI coverage: 100.0% (bounding-box overlap (upper bound))
+      Schema: not evaluated
+      Compatibility: native
+
+Hydrology (2)
+  - Lakes.shp
+      Role basis: file name
+      Dataset type: vector
+      Source type: Generic
+      Resolution/detail: 7 feature(s)
+      CRS: WGS_1984_UTM_Zone_36N (EPSG:32636)
+      AOI coverage: 100.0% (polygon clipping approximation (pure-python))
+      Schema: not evaluated
+      Compatibility: native
+      Limitation: Coverage uses lightweight polygon clipping; holes and complex multi-
+                  part AOIs may require ArcPy/GDAL validation
+  - Rivers.shp
+      Role basis: file name
+      Dataset type: vector
+      Source type: Generic
+      Resolution/detail: 48 feature(s)
+      CRS: WGS_1984_UTM_Zone_36N (EPSG:32636)
+      AOI coverage: 100.0% (polygon clipping approximation (pure-python))
+      Schema: not evaluated
+      Compatibility: native
+      Limitation: Coverage uses lightweight polygon clipping; holes and complex multi-
+                  part AOIs may require ArcPy/GDAL validation
+
+Contours (0)
+  - none detected
+Soil Moisture (0)
+  - none detected
+MGCP (0)
+  - none detected
+Vehicle Database (1)
+  - Vehicles_Can.csv
+      Role basis: vci_1/vci_50 headers found
+      Dataset type: table
+      Source type: Generic
+      Resolution/detail: 3 row(s)
+      CRS: not measured
+      AOI coverage: not measured
+      Schema: 4/4 required field(s) present
+      Compatibility: native
+
+Analysis Extent (AOI) (1)
+  - AOI_Lebanon.shp
+      Role basis: file name
+      Dataset type: vector
+      Source type: Generic
+      Resolution/detail: 1 feature(s)
+      CRS: WGS_1984_UTM_Zone_36N (EPSG:32636)
+      AOI coverage: 100.0% (polygon clipping approximation (pure-python))
+      Schema: not evaluated
+      Compatibility: native
+      Limitation: Coverage uses lightweight polygon clipping; holes and complex multi-
+                  part AOIs may require ArcPy/GDAL validation
+
+3. DUPLICATES
+----------------------------------------------------------------------------------------
+Group 1:
+  - C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data\Backup\DEM_10m.tif
+  - C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data\DEM\DEM_10m.tif
+
+4. MISSING CCM ROLES
+----------------------------------------------------------------------------------------
+- Contours
+  Model impact: Contour support is unavailable. This is usually non-blocking when a
+                valid DEM is present.
+- Soil Moisture
+  Model impact: Spatial soil-moisture variation is unavailable; a later run must use
+                another configured moisture method.
+
+5. COORDINATE SYSTEM
+----------------------------------------------------------------------------------------
+Suggested project CRS: WGS 1984 UTM Zone 36N (EPSG:32636)
+Suggestion basis: analysis extent
+This is a location-based suggestion, not an automatic conversion.
+
+6. UNCLASSIFIED FILES
+----------------------------------------------------------------------------------------
+- C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data\Misc\field_notes.csv (no keyword match)
+- C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data\Misc\old_map.pdf (unsupported file type)
+- C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\fake_data\Misc\site_photo.jpg (unsupported file type)
+
+7. NEXT STEPS
+----------------------------------------------------------------------------------------
+1. Confirm that each detected role is correct.
+2. Resolve CRS, coverage, schema, or compatibility limitations.
+3. Select inputs explicitly in CCM Step 1.
+4. Treat missing data as unknown/insufficient information, never as No-Go.
+
+Methodology note: v0.57 reports inventory facts only. It does not calculate Data Quality, CCM Fitness, Confidence, Readiness, or an automatic best-source recommendation.
+========================================================================================
+------------------------------------------------------------------------------
+REPORTS WRITTEN
+  HTML  C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\scan_output\CCM_Data_Intelligence_Report.html
+  JSON  C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\scan_output\ccm_data_catalog.json
+  TEXT  C:\Users\Son\Documents\CCM_Tool\CCM_Tool_v0.57\verification_artifacts\20260819_121157_anaconda\scan_output\CCM_Data_Intelligence_Report.txt
+------------------------------------------------------------------------------
+[verify] end_to_end_scan passed
+[verify] End-to-end outputs and factual schema passed validation
+[verify] All blocking verification checks passed
+[verify] Verification-only run complete
