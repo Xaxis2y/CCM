@@ -29,7 +29,7 @@ pre{background:#102a43;color:#e6fffa;border-radius:8px;padding:14px 16px;overflo
 <p>Open <strong>Anaconda Prompt</strong>, change to the <code>CCM_Tool_v0.57</code> folder, then run:</p>
 <pre><code>CCM_anaconda.bat
 RUN_V057_TESTS.bat</code></pre>
-<p class="small">The default environment is <code>ccm_tool</code> (Python 3.11, pytest, pyflakes, PyInstaller).</p>
+<p class="small">The default environment is <code>ccm_tool</code> (Python 3.11, pytest, pyflakes, PyInstaller). <code>CCM_anaconda.bat</code> also runs <code>conda activate</code> for you, so this Anaconda Prompt is left inside <code>ccm_tool</code> when it finishes &mdash; no separate activation step needed.</p>
 <p>For GeoPackage/file-geodatabase layer enumeration, install optional GDAL/OGR:</p>
 <pre><code>CCM_anaconda.bat ccm_tool_gdal --with-gdal
 set CCM_ENV_NAME=ccm_tool_gdal

@@ -8,6 +8,10 @@ Open **Anaconda Prompt**, change to this folder, and run:
 CCM_anaconda.bat
 ```
 
+This creates (or refreshes) the `ccm_tool` environment and leaves this
+Anaconda Prompt activated inside it — you do not need to run
+`conda activate ccm_tool` yourself afterward.
+
 Optional GDAL/OGR support for GeoPackage and file-geodatabase layer
 enumeration:
 

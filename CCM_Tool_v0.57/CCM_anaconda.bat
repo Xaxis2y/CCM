@@ -58,8 +58,25 @@ echo.
 echo CCM Anaconda environment is ready: %ENV_NAME%
 call conda run -n "%ENV_NAME%" python -c "import sys, pytest, pyflakes; print('Python', sys.version.split()[0]); print('pytest', pytest.__version__); print('pyflakes', pyflakes.__version__)"
 echo.
-echo To use it in this prompt:
-echo   conda activate %ENV_NAME%
+echo Activating %ENV_NAME% in this Anaconda Prompt...
+rem v0.57 post-review: this used to just PRINT "conda activate %ENV_NAME%" as
+rem an instruction and leave the calling prompt in whatever environment it
+rem started in. That is fixed here by actually running conda activate --
+rem which requires first leaving the "setlocal" scope from the top of this
+rem script, because setlocal captures PATH/PROMPT/CONDA_* along with every
+rem other environment variable and silently discards conda activate's
+rem changes when the script exits (an implicit "endlocal" always runs at
+rem exit /b). "endlocal & ..." on one line is the standard idiom for this:
+rem cmd.exe substitutes %ENV_NAME% for the WHOLE line before any part of it
+rem runs, so the literal environment name survives past the endlocal even
+rem though the ENV_NAME variable itself does not.
+endlocal & set "CCM_ACTIVE_ENV=%ENV_NAME%" & call conda activate %ENV_NAME%
+if errorlevel 1 (
+    echo WARNING: could not activate %CCM_ACTIVE_ENV% automatically in this prompt.
+    echo Run this manually:  conda activate %CCM_ACTIVE_ENV%
+) else (
+    echo This Anaconda Prompt is now using the %CCM_ACTIVE_ENV% environment.
+)
 echo.
 echo This environment supports the standalone scanner, tests, and packaging.
 echo ArcPy is licensed ArcGIS Pro software and is intentionally not installed here.

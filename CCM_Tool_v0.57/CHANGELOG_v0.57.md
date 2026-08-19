@@ -8,6 +8,26 @@ and `CCM_Implementation_Plan_v2_Roadmap_Aligned.md`, followed by fixes for
 every finding. No version-number bump in this pass (see `PROJECT_STATUS.md`);
 `ccm_version.py`/`bump_version.py` are ready for the next one.
 
+### Follow-up: `CCM_anaconda.bat` now activates the environment it creates
+
+`CCM_anaconda.bat` used to only *print* `conda activate %ENV_NAME%` as an
+instruction and leave the calling Anaconda Prompt in whatever environment it
+started in — the operator had to type that command themselves every time.
+Fixed so the script actually activates the environment before it exits: this
+required leaving the script's `setlocal` scope first (`endlocal & ...` on one
+line, the standard idiom — `setlocal` otherwise silently discards
+`conda activate`'s `PATH`/`PROMPT`/`CONDA_*` changes when the script ends), with
+a fallback warning-and-manual-instruction message if activation still fails
+for some reason (e.g. `conda activate` not hooked into a plain, non-Anaconda
+`cmd.exe`). `README.md`, `QUICK_START.md`, `QUICK_START.html`, and the User
+Manual's "Running Step 0b outside ArcGIS Pro" section updated to describe the
+new behaviour instead of instructing a manual `conda activate` step. The
+`RUN_*.bat` launchers were already unaffected either way — they all dispatch
+via `conda run -n`, which does not depend on the calling shell's activation
+state; this fix is about interactive convenience (`python`, `pytest`, etc.
+typed directly into the prompt now use the right environment too), not
+correctness of the launchers.
+
 ### High severity
 
 - **H-1** — `ccm_step3_advanced.py`'s `execute()` logged failures for all 5

@@ -48,7 +48,13 @@ RUN_V057_TESTS.bat
 ```
 
 The environment defaults to `ccm_tool` and installs Python 3.11, pytest,
-pyflakes, and PyInstaller. Optional GeoPackage/file-geodatabase enumeration:
+pyflakes, and PyInstaller. `CCM_anaconda.bat` also runs `conda activate` for
+you, so this Anaconda Prompt is left inside the `ccm_tool` environment when
+it finishes — no separate `conda activate ccm_tool` step needed. (The
+`RUN_*.bat` launchers dispatch into the environment themselves via
+`conda run -n`, so they work either way; activation just makes plain
+`python`/`pytest` commands typed directly in this prompt use the right
+environment too.) Optional GeoPackage/file-geodatabase enumeration:
 
 ```bat
 CCM_anaconda.bat ccm_tool_gdal --with-gdal
