@@ -1,67 +1,59 @@
-# CCM Tool v0.57
+# CCM Tool v0.58.2
 
 Integrated Cross-Country Mobility (CCM) toolbox for ArcGIS Pro.
 
-This release combines the stable v0.55.1 Steps 0-4 toolbox with the validated
-v0.56 Data Intelligence engine. The original `CCM_Tool_v0.55.1` and
-`CCM_DataIntelligence_v0.56.4_work` folders are not modified.
+This release combines the complete Steps 0-4 toolbox with the factual Step 0b
+Data Intelligence inventory and its Quality, Fitness, Confidence, Readiness,
+and reviewable recommendation outputs. The original `v0.58.1` and
+`v0.58.1a` folders remain unchanged.
 
-## What v0.57 adds
+## What v0.58.2 adds
 
-Step 0b, **Data Intelligence Scan**, is now registered in the toolbox between
-Step 0 and Step 1. It performs a factual inventory of a data root:
+Step 0b scans one complete data-root folder and:
 
 - identifies likely DEM, soil, vegetation, hydrology, contour, MGCP, vehicle,
   moisture, and extent datasets;
-- reads available raster, vector, table, CRS, schema, and container metadata;
-- enumerates readable GeoPackage and file-geodatabase layers when ArcPy or
-  GDAL/OGR is available;
-- records duplicate locations, unsupported files, limitations, and missing
-  roles; and
-- writes JSON, HTML, TXT, and additive `ccm_project.json` hand-off fields.
-
-The scan reports facts only. Data Quality, CCM Fitness, Confidence, Readiness,
-automatic source selection, and substitution recommendations are not silently
-calculated in this release.
+- reads available raster, vector, table, CRS, schema, container, duplicate,
+  and coverage metadata;
+- calculates quality scores across the available evidence;
+- evaluates dataset fitness for CCM roles and calculates confidence;
+- writes a readiness status that remains `Not Yet Run` until Step 1 outputs are
+  available; and
+- creates reviewable role recommendations without modifying source data or
+  silently replacing a user's Step 1 selection.
 
 ## Workflow
 
 1. **Step 0 — Load MGCP Data** (optional): consolidate MGCP source cells.
-2. **Step 0b — Data Intelligence Scan** (recommended): inventory the complete
-   data root and review the factual report.
-3. **Step 1 — Project Setup & Pre-process**: select and preprocess the inputs.
+2. **Step 0b — Data Intelligence Scan**: scan the complete data root and
+   review the factual and recommendation reports.
+3. **Step 1 — Project Setup & Pre-process**: review recommendations and select
+   the actual inputs explicitly.
 4. **Step 2 — Generate Mobility Map**: compute vehicle speed surfaces.
 5. **Step 3 — Advanced Analysis**: reason maps, reachability, comparison,
    obstacles, and waypoint routing.
 6. **Step 4 — Compare Two Vehicles** (optional): compare existing surfaces.
 
-The existing mobility engine and Steps 0-4 behavior remain intact. Step 0b does
-not auto-select a source; the analyst confirms each Step 1 input.
-
 ## Quick start in Anaconda Prompt
 
-From this folder:
+Run the environment setup from **Anaconda Prompt**, not the base environment:
 
 ```bat
 CCM_anaconda.bat
-RUN_V057_TESTS.bat
+RUN_V0582_TESTS.bat
 ```
 
-The environment defaults to `ccm_tool` and installs Python 3.11, pytest,
-pyflakes, and PyInstaller. Optional GeoPackage/file-geodatabase enumeration:
+The setup creates or refreshes the dedicated `ccm_tool` environment and
+installs pytest, pyflakes, and PyInstaller there. Do not install these
+packages into `base`; dependency conflicts in the base environment can make
+the validation result unreliable.
+
+For optional GDAL/OGR support:
 
 ```bat
 CCM_anaconda.bat ccm_tool_gdal --with-gdal
 set CCM_ENV_NAME=ccm_tool_gdal
-RUN_V057_TESTS.bat
-```
-
-ArcPy is supplied by a licensed ArcGIS Pro installation and is not installed by
-the Anaconda script. Run the licensed smoke test from Anaconda Prompt after
-ArcGIS Pro has been opened and signed in:
-
-```bat
-RUN_ARCGIS_SMOKE_TEST.bat
+RUN_V0582_TESTS.bat
 ```
 
 For a real data scan:
@@ -70,62 +62,61 @@ For a real data scan:
 RUN_DATA_SCAN.bat "D:\GIS\Source_Data" "D:\GIS\Project" "D:\GIS\Source_Data\Extent\AOI.shp"
 ```
 
-The GUI launcher is `CCM_Data_Scanner.bat`.
+ArcPy is supplied by a licensed ArcGIS Pro installation. After opening and
+signing in to ArcGIS Pro, run the licensed smoke tests from Anaconda Prompt:
+
+```bat
+RUN_ARCGIS_SMOKE_TEST.bat
+```
 
 ## Toolbox registration
 
-In ArcGIS Pro, add `CCM_Tool_v0.57.pyt` from this folder. The toolbox should
+In ArcGIS Pro, add `CCM_Tool_v0.58.2.pyt` from this folder. The toolbox should
 show six entries: Step 0, Step 0b, Step 1, Step 2, Step 3, and Step 4.
 
 Step 0b writes these files to the selected project folder:
 
-- `ccm_data_catalog.json` — machine-readable factual inventory;
-- `CCM_Data_Intelligence_Report.html` — human-readable report;
-- `CCM_Data_Intelligence_Report.txt` — plain-text report; and
-- additive `data_root` and `data_catalog_json` keys in `ccm_project.json`.
+- `ccm_data_catalog.json` — factual inventory plus normalized scoring records;
+- `CCM_Data_Intelligence_Report.html` and `.txt` — factual reports;
+- `ccm_quality_scores.json` — eight evidence-based quality metrics;
+- `ccm_fitness_scores.json` — role-specific dataset evaluations;
+- `ccm_confidence_scores.json` — role and model confidence;
+- `ccm_readiness_scores.json` — current readiness status;
+- `ccm_recommendations.json` — machine-readable reviewable selections; and
+- `CCM_Recommendations_Report.html` — human-readable recommendation report.
 
-Existing project configuration keys are preserved. Step 1 may display catalog
-candidates, but it must not silently choose or replace an input.
+Step 1 displays the recommendations at startup. Its explicit parameters remain
+authoritative, and any override is still the analyst's decision.
 
 ## Release files
 
 | File | Purpose |
 |---|---|
-| `CCM_Tool_v0.57.pyt` | ArcGIS Pro toolbox entry point |
-| `ccm_step0b_intelligence.py` | Step 0b toolbox class and CLI |
-| `ccm_data_catalog.py` | Inventory, metadata, duplicates, and coverage |
-| `ccm_data_report.py` | Factual TXT and HTML reports |
-| `ccm_data_sources.py` | Descriptive source/product reference data |
-| `CCM_anaconda.bat` | Dedicated Anaconda environment setup |
-| `RUN_V057_TESTS.bat` | Blocking integrated verification |
-| `RUN_ARCGIS_SMOKE_TEST.bat` | Licensed ArcPy/GDB smoke test |
-| `QUICK_START.html` | One-page operator guide |
-| `CCM_Tool_v0.57_User_Manual.docx` | Full English operator manual |
-| `package_ccm_v057.py` | Verification and release packager |
-| `build.py` | Syntax/integrity checker and ZIP packager |
-| `ccm_version.py` | Single-source `VERSION`/`RELEASE_NAME` |
-| `bump_version.py` | One-command version-bump automation |
-| `ccm_data_audit.py` | Calibration-data (`soil_rci.csv`/`Vehicles_Can.csv`) sanity checker |
-| `ccm_debug.py` | Opt-in (`CCM_DEBUG=1`) diagnostic hook |
+| `CCM_Tool_v0.58.2.pyt` | ArcGIS Pro toolbox entry point |
+| `ccm_step0b_intelligence.py` | Step 0b toolbox class, factual engine, and CLI |
+| `ccm_step0b_integration_v058.py` | Integrated scoring and recommendation workflow |
+| `ccm_data_quality.py` | Quality scoring engine |
+| `ccm_data_fitness.py` | Role fitness engine |
+| `ccm_data_confidence.py` | Confidence engine |
+| `ccm_data_readiness.py` | Step 1 readiness engine |
+| `ccm_data_selector.py` | Reviewable role recommendation engine |
+| `ccm_step1_recommendations_ui.py` | Step 1 recommendation display |
+| `RUN_V0582_TESTS.bat` | Anaconda verification launcher |
+| `RUN_ARCGIS_SMOKE_TEST.bat` | Licensed ArcPy smoke launcher |
+| `package_ccm_v0582.py` | Blocking verifier and ZIP packager |
+| `CCM_Tool_v0.58.2_User_Manual.docx` | Full English operator manual |
 
 ## Verification
 
-`RUN_V057_TESTS.bat` runs static checks, pyflakes, the legacy v0.55 regression
-suite, the v0.57 Data Intelligence tests, fixture generation, an end-to-end
-scan, and output-schema validation. Logs and generated fixtures are written
-under `verification_logs` and `verification_artifacts`; they are excluded from
-the release ZIP.
+`RUN_V0582_TESTS.bat` runs static syntax/version checks, pyflakes, calibration
+audits, the legacy regression suite, the factual inventory tests, the v0.58.2
+integration tests, fixture generation, and an end-to-end scan that verifies all
+factual, scoring, recommendation, and project-config outputs. Generated logs
+and fixtures are excluded from the release ZIP.
 
-The ArcPy smoke test validates ArcGIS metadata probing, GeoPackage/file-GDB
-enumeration, report outputs, and source-data safety. A valid ArcGIS Pro product
-license is required for that test. `RUN_ARCGIS_SMOKE_TEST.bat` runs all five
-step smoke tests (Step 0, 1, 2, 3, and 0b) explicitly and prints a combined
-pass/fail summary.
-
-## Version and scope
-
-`VERSION.txt`, `CHANGELOG_v0.57.md`, the toolbox sidecars, tests, and documents
-are aligned to v0.57. Historical release notes remain under `archives/`.
+The ArcPy launcher runs the Steps 0-4 smoke tests, the factual Step 0b smoke
+test, and the v0.58.2 integrated Step 0b smoke test. ArcPy and a valid ArcGIS
+Pro license are required for that gate.
 
 License: GPL-2.0-or-later. Copyright (c) 2026 Eui Soo SON.
 
