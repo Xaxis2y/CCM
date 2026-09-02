@@ -1,0 +1,65 @@
+name,max_road_spd_kph,max_on_road_grad,max_off_road_grad,vehicle_width_m,max_override_diameter_m,vci_1,vci_50,min_turning_radius_m,locomotion_type,mmp_kpa,nation,source,note
+M1,71,68.7,54,3.65,0.25,25,58,6.1,1,104,US,NRMM published,M1 Abrams baseline (legacy table)
+M60A1,48,60,45,3.65,0.15,20,48,9.4,1,86,US,NRMM published,legacy MBT
+M109,56,60,45,3.1,0.12,25,57,6.6,1,102,US,NRMM published,155mm SP howitzer (legacy)
+M113,48,60,45,2.96,0.1,17,40,4.8,1,71,US,NRMM published,tracked APC baseline
+M35A2,56,64,30,2.43,0.06,26,59,5.3,0,328,US,NRMM published,6x6 2.5-ton truck
+M151,50,60,28,1.69,0.04,19,44,5.8,0,244,US,NRMM published,1/4-ton utility
+T62,50,62,45,3.37,0.15,21,49,9.33,1,88,Russia,NRMM published,legacy Soviet MBT
+T72,60,62,45,3.38,0.18,25,60,9.2,1,107,Russia,NRMM published,T-72 baseline
+M2,66,60,60,6.2,0.15,15,35,6.2,1,63,US,NRMM published,Bradley IFV (legacy)
+M3,66,60,60,6.2,0.15,15,35,6.2,1,63,US,NRMM published,Bradley CFV (legacy)
+M48_ALVB,48,30,22,4.3,0.0,26,60,9.6,1,107,US,NRMM published,AVLB bridge layer
+M60_ALVB,51,30,22,4.3,0.0,22,51,9.6,1,91,US,NRMM published,AVLB bridge layer
+MLRS,64,60,45,2.97,0.15,15,35,6.97,1,63,US,NRMM published,M270 rocket artillery
+Leopard_2A4,68,60,40,3.7,0.22,21,48,7.4,1,86,Canada,derived,"MBT ~55t, wide tracks; NGP-derived"
+Leopard_2A4M_CAN,68,60,40,3.75,0.22,21,49,7.4,1,87,Canada,derived,mine-protected MBT ~60t
+Leopard_2A6M_CAN,68,60,40,3.75,0.23,22,50,7.5,1,89,Canada,derived,2A6M ~63t incl. mine kit
+Leopard_2_AEV_Kodiak,68,60,35,3.54,0.0,22,50,7.5,1,89,Canada,derived,armoured engineer vehicle
+Leopard_2_ARV_Beaver,68,60,35,3.54,0.0,22,50,7.5,1,89,Canada,derived,armoured recovery vehicle
+Badger_AEV,62,60,35,3.25,0.0,21,48,6.5,1,86,Canada,derived,Leopard 1-based engineer vehicle
+Beaver_AVLB,62,30,22,4.0,0.0,22,50,7.0,1,89,Canada,derived,Leopard 1-based bridge layer
+LAV_6.0,100,60,45,2.82,0.1,20,47,8.5,0,261,Canada,derived,"8x8 IFV ~28.6t, CTIS"
+LAV_6.0_MkII,100,60,45,2.82,0.1,20,47,8.5,0,261,Canada,derived,"CANSEC 2025 turret upgrade, same chassis"
+ACSV_TCV,100,60,45,2.82,0.1,21,48,8.5,0,267,Canada,derived,LAV 6.0-based support vehicle (Bison/M113 replacement)
+TAPV,105,60,40,2.8,0.08,18,42,8.8,0,233,Canada,derived,"4x4 Textron patrol ~17t, CTIS"
+Bison,100,60,45,2.53,0.1,19,44,7.9,0,244,Canada,derived,8x8 APC (being replaced by ACSV)
+Coyote,100,60,45,2.53,0.1,19,45,7.9,0,250,Canada,derived,LAV-25 recce 8x8
+MSVS_SMP,90,60,30,2.5,0.1,24,55,9.5,0,306,Canada,derived,Standard Military Pattern logistics truck
+LSVW,90,60,28,2.1,0.06,22,50,7.0,0,278,Canada,derived,4x4 light support truck
+LUVW_GWagon,120,60,30,1.84,0.05,20,46,6.3,0,256,Canada,derived,Mercedes G-Wagon 4x4
+M1A2_SEPv3,67,60,54,3.66,0.25,25,58,7.6,1,104,US,derived,Abrams SEPv3 ~66.8t
+M2A3_Bradley,66,60,60,3.6,0.15,15,35,6.2,1,62,US,derived,IFV ~30t
+M109A7_Paladin,61,60,45,3.15,0.12,25,57,6.6,1,102,US,derived,PIM SP howitzer ~28t
+AMPV,61,60,45,3.3,0.12,18,42,7.0,1,75,US,derived,Armored Multi-Purpose Vehicle (M113 replacement)
+Stryker_ICV,100,60,45,2.72,0.1,20,46,7.8,0,256,US,derived,"8x8 ICV ~19t, CTIS"
+Stryker_DVHA1,97,60,45,2.9,0.1,21,48,7.8,0,267,US,derived,double-V hull ~25t
+M88A2_Hercules,48,60,35,3.66,0.0,22,52,8.5,1,93,US,derived,tracked recovery ~63t
+M9_ACE,48,60,40,3.2,0.0,22,50,6.0,1,89,US,derived,armored combat earthmover
+HIMARS_M142,85,60,30,2.4,0.1,22,50,9.0,0,278,US,derived,6x6 rocket artillery ~16t
+JLTV_M1278,110,60,40,2.5,0.08,19,44,8.4,0,244,US,derived,"4x4 ~6.4t, CTIS"
+HMMWV_M1151,113,60,40,2.3,0.06,20,46,7.6,0,256,US,derived,up-armored 4x4
+MaxxPro_MRAP,100,60,30,2.55,0.08,22,52,9.0,0,289,US,derived,MRAP 4x4 ~17t
+FMTV_M1078,94,60,30,2.44,0.08,23,54,7.8,0,300,US,derived,2.5-ton 4x4 truck
+HEMTT_M977,88,60,30,2.44,0.1,24,56,9.6,0,311,US,derived,8x8 heavy truck ~17t
+PLS_M1075,84,60,30,2.5,0.1,25,58,11.4,0,322,US,derived,10x10 palletized load system
+T-72B3,60,58,45,3.46,0.18,25,58,9.2,1,104,Russia,derived,modernized T-72 ~46t
+T-80U,70,60,45,3.6,0.18,25,58,8.5,1,104,Russia,derived,gas-turbine MBT ~46t
+T-90M,60,58,45,3.78,0.18,24,56,8.7,1,100,Russia,derived,T-90M Proryv ~48t
+T-14_Armata,75,60,45,3.9,0.2,22,52,8.5,1,93,Russia,derived,next-gen MBT ~55t (limited fielding)
+BMP-1,65,60,45,2.94,0.1,16,37,6.5,1,66,Russia,derived,"tracked IFV ~13t, amphibious"
+BMP-2,65,60,45,3.15,0.1,16,38,6.5,1,68,Russia,derived,tracked IFV ~14t
+BMP-3,70,60,45,3.3,0.12,17,40,6.7,1,71,Russia,derived,tracked IFV ~18.7t
+BMD-4,67,60,45,3.11,0.08,15,36,5.5,1,64,Russia,derived,airborne IFV ~13.5t
+MT-LB,62,60,45,2.86,0.08,13,30,6.0,1,54,Russia,derived,"multipurpose tracked, very low ground pressure ~28kPa"
+BTR-80,90,60,30,2.9,0.1,20,46,7.4,0,256,Russia,derived,"8x8 APC ~13.6t, amphibious"
+BTR-82A,90,60,30,2.9,0.1,20,46,7.4,0,256,Russia,derived,8x8 APC ~15.4t
+2S1_Gvozdika,60,60,45,2.85,0.1,17,40,6.5,1,71,Russia,derived,"122mm SP howitzer ~15.7t, amphibious"
+2S3_Akatsiya,60,60,45,3.25,0.12,22,52,7.0,1,93,Russia,derived,152mm SP howitzer ~27.5t
+2S19_Msta-S,60,58,45,3.58,0.15,24,55,7.5,1,98,Russia,derived,152mm SP howitzer ~42t
+BM-21_Grad,75,60,30,2.69,0.1,24,55,9.0,0,306,Russia,derived,6x6 Ural rocket artillery
+Ural-4320,85,60,28,2.5,0.1,24,56,9.5,0,311,Russia,derived,6x6 general cargo truck
+KamAZ_Typhoon,100,60,30,2.55,0.08,23,54,9.5,0,300,Russia,derived,6x6 MRAP ~24t
+Tigr_GAZ-2330,125,60,35,2.3,0.06,20,46,6.5,0,256,Russia,derived,4x4 utility ~7t
+BREM-1,50,60,35,3.46,0.0,24,55,9.2,1,98,Russia,derived,T-72-based recovery vehicle
+IMR-2,50,60,40,3.48,0.0,22,52,8.0,1,93,Russia,derived,tracked combat engineer vehicle
