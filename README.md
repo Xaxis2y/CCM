@@ -1,4 +1,4 @@
-# CCM Tool v0.60.1
+# CCM Tool v0.60.10
 
 Integrated Cross-Country Mobility (CCM) toolbox for ArcGIS Pro.
 
@@ -132,7 +132,7 @@ combined PASS/FAIL with per-test logs under `verification_logs\`.
 
 ## Toolbox registration
 
-In ArcGIS Pro, add `CCM_Tool_v0.60.1.pyt` from this folder. The toolbox should
+In ArcGIS Pro, add `CCM_Tool_v0.60.10.pyt` from this folder. The toolbox should
 show six entries: Step 0, Step 0b, Step 1, Step 2, Step 3, and Step 4.
 
 Step 0b writes these files to `<Project Root>/02_Scan_Index`:
@@ -156,7 +156,7 @@ authoritative, and any override is still the analyst's decision.
 
 | File | Purpose |
 |---|---|
-| `CCM_Tool_v0.60.1.pyt` | ArcGIS Pro toolbox entry point |
+| `CCM_Tool_v0.60.10.pyt` | ArcGIS Pro toolbox entry point |
 | `ccm_project_config.py` | Canonical `ccm_project.json` read/write (`load_config`/`save_config`) and `run_tool()` test dispatch |
 | `ccm_project_init.py` | Standalone Project Initializer GUI (creates the single-root layout, no arcpy needed) |
 | `build_project_init_exe.py` | PyInstaller build script for the Project Initializer |
@@ -174,7 +174,7 @@ authoritative, and any override is still the analyst's decision.
 | `test_single_root_pure_python.py` | Pure-Python (no arcpy) verifier for the single-root rewrite |
 | `MANUAL_TEST_CHECKLIST.md` | Manual ArcGIS Pro dialog-walkthrough checklist |
 | `package_ccm.py` | Blocking verifier and ZIP packager |
-| `CCM_Tool_v0.60.1_User_Manual.docx` | Full English operator manual |
+| `CCM_Tool_v0.60.10_User_Manual.docx` | Full English operator manual |
 
 ## Verification
 
